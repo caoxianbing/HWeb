@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="c2a72b4c682b450fa3cbc5d4b3ba5368" Name="Diagram1">
+        <EntityTypeShape EntityType="WebDBModel.Device" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.Doctor" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.Img" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.Notice" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.SysConfig" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.User" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.UserMenu" Width="1.5" PointX="2.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.UserType" Width="1.5" PointX="4.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.UserTypeToMenu" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.WebLog" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebDBModel.SortMenu" Width="1.5" PointX="9.375" PointY="4.75" />
+        <EntityTypeShape EntityType="WebDBModel.DeviceAndUser" Width="1.5" PointX="5.375" PointY="9.75" />
+        <EntityTypeShape EntityType="WebDBModel.CmdConfig" Width="1.5" PointX="7.375" PointY="9.75" />
+        <EntityTypeShape EntityType="WebDBModel.CmdLog" Width="1.5" PointX="9.375" PointY="8.75" />
+        <EntityTypeShape EntityType="WebDBModel.CmdQueue" Width="1.5" PointX="0.75" PointY="10.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

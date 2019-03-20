@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "居民列表";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+
+    .um_headimg {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+    }
+
+    .a-self:hover {
+        color: #009688;
+        cursor: pointer;
+    }
+</style>
+<div style="padding:0 0 10px;">
+    <div class="layui-row">
+        我的居民
+        <div class="layui-col-md2" id="bind_user">
+            <div class="grid-demo">
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+    <table id="tab_list" lay-filter="tab_list"></table>
+</div>
+@Html.Partial("~/Views/Shared/_CmdDiv.cshtml")
+<script type="text/javascript">
+    var table = layui.table, form = layui.form;
+    //w1弹出所有图标，w2弹出菜单详细
+    var  w2;
+    $().ready(function () {
+        table.render({
+            elem: '#tab_list'
+            , url: '/User/AjaxGetUsersByDoctor' //数据接口
+         , page: true //开启分页
+         , cols: [[ //表头
+              {
+                  field: 'HeadImgId', title: '', width: 70, templet: function (d) {
+                      return '<img class="um_headimg" src="/Other/GetImg?id=' + d.HeadImgId + '" />';
+                  }
+              },
+             {
+                 field: 'UserName', title: '居民姓名'
+             },
+             { field: 'PhoneNum', title: '手机号码' },
+             { field: 'BloodValue', title: '血压阈值' },
+
+             { field: 'Shrink', title: '收缩压' },
+             { field: 'Diastolic', title: '舒张压' },
+             { field: 'HeartValue', title: '心率阈值' },
+             { field: 'Heart', title: '心率' },
+             { field: 'LastCheckTime', title: '测量时间' },
+             { field: 'Step', title: '步数' }, 
+             {
+                 field: 'Sex', title: '性别', width: 60, templet: function (d) {
+                     if (d.Sex == 1) {
+                         return "<i class='layui-icon' style='color:#1E9FFF'>&#xe662;</i>";
+                     }
+                     else if (d.Sex == 0) {
+                         return "<i class='layui-icon' style='color:#f69ed1'>&#xe661;</i>";
+                     }
+                     else
+                         return "";
+                 }
+             }
+         ]]
+            , page: false,
+            limit: 200,
+            limits: [10, 20, 30, 50],
+            where: { type: 4 }
+        });
+    });
+
+    
+
+    function edit(id) {
+        location.href = "/User/EditUserByManage?userId=" + id;
+    }
+
+ 
+</script>
+

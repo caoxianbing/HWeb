@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{0E4EBD73-EF2D-4E51-B2A0-647C09687F47}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HWeb.Entity</RootNamespace>
+    <AssemblyName>HWeb.Entity</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\HWeb.Entity.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="APIModel\BaseModel.cs" />
+    <Compile Include="APIModel\DeviceCheckModel.cs" />
+    <Compile Include="APIModel\DeviceListModel.cs" />
+    <Compile Include="APIModel\HealthInfoModel.cs" />
+    <Compile Include="APIModel\HealthReportModel.cs" />
+    <Compile Include="APIModel\HistoryModel.cs" />
+    <Compile Include="APIModel\LoginModel.cs" />
+    <Compile Include="APIModel\RegisterModel.cs" />
+    <Compile Include="APIModel\SendCmdModel.cs" />
+    <Compile Include="ExtendWebEntity\CmdConfig.cs" />
+    <Compile Include="ExtendWebEntity\User.cs" />
+    <Compile Include="ExtendWebEntity\UserAndDoctor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebEntity\CmdConfig.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\CmdLog.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\CmdQueue.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\Device.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\DeviceAndUser.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\Doctor.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\Img.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\Notice.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\SortMenu.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\SysConfig.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\User.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\UserMenu.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\UserType.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\UserTypeToMenu.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\WebDataModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebDataModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\WebDataModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\WebDataModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WebDataModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="WebEntity\WebLog.cs">
+      <DependentUpon>WebDataModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+    <EntityDeploy Include="WebEntity\WebDataModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>WebDataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="WebEntity\WebDataModel.edmx.diagram">
+      <DependentUpon>WebDataModel.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WebEntity\WebDataModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>WebDataModel.edmx</DependentUpon>
+      <LastGenOutput>WebDataModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="WebEntity\WebDataModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>WebDataModel.edmx</DependentUpon>
+      <LastGenOutput>WebDataModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

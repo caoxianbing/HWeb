@@ -1,0 +1,72 @@
+﻿@using HWeb;
+@{
+    ViewBag.Title = "SiteConfig";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+   .sc_config {
+        padding:10px;
+        width:500px;
+    }
+    #d_btn {
+        position: fixed;
+        bottom: 10px;
+        right: 40px;
+    }
+</style>
+<div style="padding:20px;">
+    <form class="layui-form" action="/Manage/AjaxSubSysConfig" onsubmit="return false;">
+
+        <blockquote class="layui-elem-quote">
+            <div><i class="layui-icon">&#xe631;</i>&nbsp;基本配置</div>
+        </blockquote>
+        <div class="sc_config">
+            <div class="layui-form-item" style="width:400px;">
+                <label class="layui-form-label">网站名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="SysName" lay-verify="required" autocomplete="off" value="@ConstVal.WebConfig.SysName" placeholder="请输入网站名称" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item" style="width:400px;">
+                <label class="layui-form-label">备案号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="ICP" lay-verify="required" value="@ConstVal.WebConfig.ICP" autocomplete="off" placeholder="请输入备案号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="width:200px;">
+                <label class="layui-form-label">Js版本</label>
+                <div class="layui-input-block">
+                    <input type="text" name="JsVersion" value="@ConstVal.WebConfig.JsVersion" lay-verify="required" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <blockquote class="layui-elem-quote">
+            <div><i class="layui-icon">&#xe631;</i>&nbsp;背景图片</div>
+        </blockquote>
+        <div class="sc_config" style="margin-left:35px;">
+           @Html.Partial("~/Views/Shared/_UploadImg.cshtml")
+            <input type="hidden" value="@ConstVal.WebConfig.LoginBackImgId" name="LoginBackImgId" id="hid_bimg" />
+        </div>
+        <div id="d_btn">
+            <button class="layui-btn layui-btn-normal" lay-filter="btn_sub" lay-submit="" style="width:130px;">保&nbsp;&nbsp;存</button>
+        </div>
+        <input type="hidden" id="hid_imgid" value="@ConstVal.WebConfig.LoginBackImgId" />
+    </form> 
+</div>
+
+<script type="text/javascript">
+    var form = layui.form;
+    $().ready(function () {
+        initImg("/Other/GetImg?id=" + $("#hid_bimg").val(), 1, 2, $("#hid_imgid").val());
+        //监听提交事件
+        formSub({
+            form: form, layer: layer, btn: "btn_sub", msg: "提交中...", okFunc: function (result) {
+                 if (typeof result == "string")  result = eval('(' + result + ')');
+                layer.alert("保存成功", { icon: 1 }, function () {
+                    location.reload();
+                })
+            }
+        });
+    });
+</script>

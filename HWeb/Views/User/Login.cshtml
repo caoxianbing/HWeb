@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "登陆";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+    body {
+        /*background:url(../../Content/images//loginback.jpg);*/
+        background-size: 100%;
+        background-repeat: no-repeat;
+    }
+
+    .l_all {
+        width: 400px;
+        height: 260px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        margin-left: -200px;
+        margin-top: -180px;
+        padding: 5px;
+        background-color: white;
+        padding: 30px;
+        text-align: center;
+        border-radius: 5px;
+        box-shadow: 2px 2px 2px #696969;
+    }
+
+    #l_dform {
+        width: 380px;
+        text-align: left;
+    }
+
+    .lbl_icon {
+        width: 60px !important;
+        margin-left: 50px;
+    }
+
+    .l_icon {
+        font-size: 20px !important;
+        color: #1E9FFF;
+    }
+
+    #d_icp {
+        position: fixed;
+        bottom: 5px;
+        right: 10px;
+    }
+</style>
+<div class="l_all">
+    <h2>@ConstVal.WebConfig.SysName</h2>
+    <br />
+    <form class="layui-form layui-form-pane" method="post" onsubmit="return false;" action="/User/AjaxLogin">
+        <input type="hidden" id="hid_ip" name="curIp" />
+        <div id="l_dform">
+            <div class="layui-form-item">
+                <label class="layui-form-label lbl_icon">
+                    <i class="layui-icon l_icon">&#xe66f;</i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" name="loginName" lay-verify="loginName" autocomplete="off" placeholder="请输入账号/手机号码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label lbl_icon">
+                    <i class="layui-icon l_icon">&#xe673;</i>
+                </label>
+                <div class="layui-input-block">
+                    <input type="password" name="pwd" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+                @*<div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>*@
+            </div>
+
+            <div style="margin-left:50px;">
+                <button class="layui-btn layui-btn-normal" lay-submit="" id="btn_sub" lay-filter="btn_sub" style="width:100px;letter-spacing:5px;">登陆</button>
+                @*<a href="#" style="margin:40px;vertical-align:bottom;">忘记密码</a>*@
+                <p>
+                    <br />
+                    <a href="/User/Register" lay-ignore>暂无账号？注册......</a>
+                </p>
+            </div>
+
+        </div>
+    </form>
+
+    <img src="/Other/GetImg?id=@ConstVal.WebConfig.LoginBackImgId" style="display:none;" id="img_hid" />
+
+    <div id="d_icp">@ConstVal.WebConfig.ICP</div>
+</div>
+<script src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
+<script type="text/javascript">
+    var form = layui.form, layer = layui.layer;
+
+    $().ready(function () {
+
+        $("#hid_ip").val(returnCitySN["cip"]);
+
+        var _url = "url(" + $("#img_hid").attr("src") + ")";
+        $("body").css("background-image", _url)
+            .css("background-size", "100%")
+            .css("background-repeat", "no-repeat");
+    });
+
+
+    //监听提交
+    form.on('submit(btn_sub)', function (data) {
+        var _that = this;
+        $(_that).attr("disabled", "disabled");
+        var _tip1 = layer.msg('登录中，请稍后......', {
+            icon: 16, shade: 0.01
+        });
+        ajaxForm(_that, data, function (result) {
+            if (typeof result == "string")
+                if (typeof result == "string") result = eval('(' + result + ')');
+            $(_that).removeAttr("disabled");
+            layer.close(_tip1);
+            if (!isOk(result)) {
+                layer.alert(result.Message, { icon: 5 });
+            }
+            else {
+                layer.msg('登陆成功！', { icon: 1 });
+                location.href = "/Home/Index";
+            }
+        });
+        return false;
+    });
+</script>

@@ -1,0 +1,151 @@
+﻿<!--设备指令-->
+<style type="text/css">
+    .grid-demo {
+        padding:0 10px;
+    }
+    #d_loglist {
+        overflow-y: scroll !important;
+        height: 430px;
+        margin-bottom: 10px;
+    }
+    #ul_list {
+        padding:5px;
+        margin:0;
+        margin-bottom:200px;
+    }
+        #ul_list > li {
+            text-decoration:none;
+            line-height:26px;
+            color:#2F4056;
+            font-size:13px;
+        }
+    .dl_cmd {
+        padding:10px;
+    }
+</style>
+<div id="d_cmd" style="display:none;overflow-y:hidden;">
+    <div class="layui-row" style="overflow-y:hidden;height:400px;">
+        <div class="layui-col-xs12 layui-col-md3">
+            <div class="grid-demo">
+                <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+                    <div>指令内容</div>
+                </blockquote>
+                <form class="layui-form" action="#" onsubmit="return false;">
+                    <div id="d_cmdlist">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-md9" style="border-left:1px solid #e6e6e6;min-width:100px;">
+            <div class="grid-demo">
+                <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+                    <div>下发记录</div>
+                </blockquote>
+                <div id="d_loglist">
+                    <ul id="ul_list"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="hid_deviceId" />
+</div>
+<script type="text/javascript">
+    //打开下发指令面板
+    //type 1使用户id，2是设备id
+    var wCmd,lCmd,type,objId,userName;
+    function openCmd(t, oId) {
+        if (!form) form = layui.form;
+        lCmd = layer.load();
+        type = t;
+        objId = oId;
+        loadData()
+    }
+
+    function loadData() {
+        $("#ul_list").html("");
+        $("#d_cmdlist").html("");
+        wCmd && layer.close(wCmd);
+        $.post("/Device/AjaxGetCmdListAndLog", { type: type, objId: objId }, function (result) {
+            lCmd && layer.close(lCmd);
+            result = proResult(result);
+            if (isOk(result)) {
+                wCmd = layer.open({
+                    title: result.Imei + ' 设备指令',
+                    type: 1,
+                    content: $("#d_cmd"),
+                    area: ['700px', '460px;']
+                });
+                $("#hid_deviceId").val(result.DeviceId);
+                userName = result.UserName;
+                showCmd(result.CmdList);
+                showLog(result.LogList);
+            } else {
+                layer.msg(result.Message);
+            }
+        });
+    }
+
+    function showCmd(data) {
+        if (data.length > 0) {
+            $.each(data, function (index, item) {
+                var _html = '<div class="dl_cmd"><button type="button" class="layui-btn layui-btn-normal layui-btn-sm" onclick="sendCmd(\'' + item.CmdCode + '\',\'' + item.CmdName + '\')">' + item.CmdName + '</button></div>';
+                //添加下拉
+                if (item.PutType == "select") {
+                    var _sel = '<select class="input_' + item.CmdCode + '"><option value="0">' + item.Title + '</option>';
+                    if (item.PutValue) {
+                        var options = item.PutValue.split(',');
+                        $.each(options, function (i1, t1) {
+                            _sel += '<option ' + (item.CmdValue == t1.split('|')[1] ? "selected" : "") + ' value="' + t1.split('|')[1] + '">' + t1.split('|')[0] + '</option>';
+                        });
+                    }
+                    _sel += "</select>";
+                    $("#d_cmdlist").append("<br/>" + _sel);
+
+                }
+                $("#d_cmdlist").append(_html);
+            });
+            form.render();
+            // $("#d_cmdlist .layui-unselect").removeAttr("readonly");
+        } else {
+            $("#d_cmdlist").html("<center>暂无指令</center>");
+        }
+    }
+    //下发指令
+    function sendCmd(cmdCode, cmdName) {
+        var _param = "";
+        if ($(".input_" + cmdCode))
+            _param = $(".input_" + cmdCode).val();
+        var _deviceId = $("#hid_deviceId").val();
+        var _tip1 = layer.msg('指令下发中', {
+            icon: 16, shade: 0.01
+        });
+        $.post("/Device/AjaxSendCmd", { cmdCode: cmdCode, deviceId: _deviceId, param: "", min: _param||0 }, function (result) {
+            layer.close(_tip1);
+            result = proResult(result);
+            if (isOk(result)) {
+                layer.msg(result.Message);
+            } else {
+                layer.msg("失败：" + result.Message);
+            }
+            //  loadData();
+            $(".li_no").remove();
+            $("#ul_list").prepend("<li><i>" + userName + "</i>下发指令&nbsp;<span style='color:#1E9FFF;'>" + cmdName + "</span>&nbsp;" + result.Message + "&nbsp;&nbsp;<span style='color:#c2c2c2;'>—刚才</span></li>");
+        });
+    }
+
+    function showLog(data) {
+        if (data.length > 0) {
+            $.each(data, function (index, item) {
+                var _r = "";
+                if (item.IsSucess) {
+                    _r = item.Response;
+                } else {
+                    _r + "失败：" + item.Response;
+                }
+                $("#ul_list").append("<li><i>" + item.SendLoginName + "</i>下发指令&nbsp;<span style='color:#1E9FFF;'>" + item.CmdName + "</span>&nbsp;" + _r + "&nbsp;&nbsp;<span style='color:#c2c2c2;'>—" + item.SendDate + "</span></li>");
+            });
+        } else {
+            $("#ul_list").html("<li class='li_no' style='color:#c2c2c2;'>暂无记录</li>");
+        }
+    }
+</script>

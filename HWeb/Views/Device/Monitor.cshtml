@@ -1,0 +1,169 @@
+﻿@using HWeb.Entity.WebEntity
+@{
+    User user = ViewBag.user as User;
+
+    ViewBag.Title = "Monitor";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+
+}
+<style type="text/css">
+    .BMapLib_sendToPhone {
+        display:none !important;
+    }
+    .d_layout, html, body {
+        height: 100% !important;
+        margin: 0;
+        padding: 0;
+    }
+    #m_all {
+        padding:0;
+        height:100%;
+    }
+    #mal_list{
+      padding:10px;
+    }
+        #mal_list > ul,.ul_temple {
+            padding:0;
+            margin:0
+        }
+            #mal_list > ul > li {
+                text-decoration:none;
+                padding:5px;
+                cursor:pointer;
+                margin-top:2px;
+            }
+                #mal_list > ul > li:hover {
+                    background-color:#eeeeee;
+                }
+                #mal_list > ul > li > span {
+                    margin-left:60px;
+                }
+            .ul_temple > li {
+                text-decoration: none;
+                padding: 2px 5px !important;
+                font-family: "microsoft yahei" !important;
+            }
+    .ma_dli_on {
+      background-color:#eeeeee;
+    }
+    #m_address {
+        background-color: white;
+        position: absolute;
+        top: 0;
+        left: 300px;
+        padding: 5px 10px;
+        box-shadow: 1px 1px 50px rgba(0,0,0,.3);
+    }
+    #sp_con {
+        cursor:pointer;
+    }
+    .a-self:hover {
+        color: #4b70d9;
+    }
+    .dd_img {
+        width:35px;
+        height:35px;
+        border-radius:50%;
+    }
+    #d_detail {
+        padding:10px;
+        display:none;
+    }
+    .no_border {
+        border:none;
+    }
+    .layui-form-label {
+        color:#808080 !important;
+    }
+    .li_imei {
+       color:#808080;
+       margin-left:0 !important;
+    }
+</style>
+<div id="m_all">
+</div>
+
+<div id="m_address">
+    <span id="sp_con" data-val="0"><i class="layui-icon">&#xe652;</i></span>&nbsp;&nbsp;<span id="m_timer">20 S</span>
+    &nbsp;&nbsp;
+    <span id="a_spana"></span>
+</div>
+
+<div id="ma_div" style="display:none;">
+    <div id="mal_list">
+        <ul>
+            <li>
+            <li>加载中......</li>
+        </ul>
+    </div>
+</div>
+
+<div id="ma_dtemple" style="display:none;">
+    <ul class="ul_temple">
+        <li><b>状态</b>：{status}</li>
+        <li><b>心率</b>：{heartbate}</li>
+        <li><b>步数</b>：{step}</li>
+        <li><b>运动距离</b>：{distance}</li>
+        <li class="ult_dt"><b>测量时间</b>：{datatime}</li>
+        <li><b>定位时间</b>：{positiontime}</li>
+        <li><a class="a-self" href="Javascript:return false" onclick="loadHistory();;"><i class="layui-icon" data-icon="&#xe609;">&#xe60e;</i>&nbsp;<cite>今日轨迹</cite></a>&nbsp;&nbsp;
+            <a class="a-self" href="Javascript:return false" data-url="/Device/History?id={id}" onclick="openHistory(this);"><i class="layui-icon" data-icon="&#xe609;">&#xe609;</i>&nbsp;<cite>历史轨迹</cite></a>&nbsp;&nbsp;
+        <a class="a-self" onclick="showUser({id},'{imei}')"><i class="layui-icon" data-icon="&#xe66f;">&#xe66f;</i>&nbsp;<cite>居民信息</cite></a>
+        </li>
+    </ul>
+</div>
+
+<div id="d_detail">
+    <div>
+        <div class="layui-form-item">
+            <div class="layui-inline" style="margin-left:60px;">
+               <img style="vertical-align:bottom;" class="dd_img">
+               &nbsp;&nbsp;<span style="vertical-align:bottom;" id="sp_ln"></span>
+                &nbsp;&nbsp;<i id="sp_phone"></i>
+            </div>
+        </div>
+
+       <div class="layui-form-item">
+           <div class="layui-inline">
+               <label class="layui-form-label">姓名</label>
+               <div class="layui-input-inline">
+                   <input type="text" id="txt_un" class="layui-input no_border">
+               </div>
+           </div>
+           <div class="layui-inline">
+               <label class="layui-form-label">邮箱</label>
+               <div class="layui-input-inline">
+                   <input type="text" id="txt_email" class="layui-input no_border">
+               </div>
+           </div>
+       </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="txt_sex" value="男" class="layui-input no_border">
+                </div>
+            </div>
+
+            <div class="layui-inline">
+                <label class="layui-form-label">生日</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="txt_bd" class="layui-input no_border">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">其他信息</label>
+            <div class="layui-input-block" style="width:500px;">
+                <textarea placeholder="请输入内容" id="txt_info" readonly="readonly" class="layui-textarea no_border"></textarea>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=bh1pq5GICGaHuZG6eMsdnhal"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+<script src="~/Scripts/baiduMap.js?v=@ConstVal.WebConfig.JsVersion"></script>
+<script src="~/Scripts/monitor.js?v=@ConstVal.WebConfig.JsVersion"></script>

@@ -1,0 +1,772 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WebDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CmdConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Model" Type="int" Nullable="false" />
+          <Property Name="CmdCode" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="CmdName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DefaultParam" Type="varchar" MaxLength="100" />
+          <Property Name="PutType" Type="varchar" MaxLength="100" />
+          <Property Name="PutValue" Type="varchar" MaxLength="300" />
+          <Property Name="Title" Type="varchar" MaxLength="100" />
+          <Property Name="IsNowSend" Type="bit" />
+        </EntityType>
+        <EntityType Name="CmdLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CmdCode" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="CmdName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Imei" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SendDate" Type="datetime" />
+          <Property Name="IsSucess" Type="bit" />
+          <Property Name="Response" Type="varchar" MaxLength="300" />
+          <Property Name="ResponseTime" Type="datetime" />
+          <Property Name="Param" Type="varchar" MaxLength="200" />
+          <Property Name="Notice" Type="varchar" MaxLength="300" />
+          <Property Name="SendLoginName" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="CmdQueue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="APIDeviceId" Type="int" />
+          <Property Name="Model" Type="int" Nullable="false" />
+          <Property Name="IMEI" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastExecTime" Type="datetime" />
+          <Property Name="Created" Type="datetime" />
+          <Property Name="CmdCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Param" Type="varchar" MaxLength="200" />
+          <Property Name="Notice" Type="varchar" MaxLength="300" />
+          <Property Name="ExceTime" Type="int" />
+        </EntityType>
+        <EntityType Name="Device">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Imei" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Created" Type="datetime" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" />
+          <Property Name="IconId" Type="int" />
+          <Property Name="APIDeviceId" Type="int" />
+          <Property Name="APIDeviceModel" Type="int" />
+        </EntityType>
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="DoctorInfo" Type="varchar" MaxLength="500" />
+          <Property Name="Subject" Type="varchar" MaxLength="200" />
+          <Property Name="Hospital" Type="varchar" MaxLength="100" />
+          <Property Name="Position" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Img">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ImgPath" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Note" Type="varchar" MaxLength="500" />
+          <Property Name="ObjId" Type="int" Nullable="false" />
+          <Property Name="ImgType" Type="int" Nullable="false" />
+          <Property Name="ClickUrl" Type="varchar" MaxLength="500" />
+          <Property Name="Alt" Type="varchar" MaxLength="200" />
+          <Property Name="UploadTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Notice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Content" Type="varchar" MaxLength="800" Nullable="false" />
+          <Property Name="CreateUser" Type="int" Nullable="false" />
+          <Property Name="Created" Type="datetime" />
+          <Property Name="Status" Type="int" />
+          <Property Name="CreateUserName" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="SysConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LoginUrl" Type="varchar" MaxLength="200" />
+          <Property Name="LoginBackImgId" Type="int" />
+          <Property Name="SysName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Version" Type="varchar" MaxLength="100" />
+          <Property Name="ICP" Type="varchar" MaxLength="100" />
+          <Property Name="JsVersion" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="100" />
+          <Property Name="LoginName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="PhoneNum" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Pwd" Type="varchar" MaxLength="300" Nullable="false" />
+          <Property Name="RegisterTime" Type="datetime" />
+          <Property Name="HeadImgId" Type="int" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="UserTypeId" Type="int" />
+          <Property Name="Sex" Type="int" />
+          <Property Name="Status" Type="int" />
+          <Property Name="BirthDate" Type="datetime" />
+          <Property Name="UserInfo" Type="varchar" MaxLength="500" />
+          <Property Name="LastLoginTime" Type="datetime" />
+          <Property Name="LastLoginIp" Type="varchar" MaxLength="100" />
+          <Property Name="PwdKey" Type="varchar" MaxLength="100" />
+          <Property Name="APIToken" Type="varchar" MaxLength="100" />
+          <Property Name="APIUserId" Type="int" />
+          <Property Name="BingDoctorId" Type="int" />
+          <Property Name="HeartMin" Type="int" />
+          <Property Name="HeartMax" Type="int" />
+          <Property Name="BloodMin" Type="int" />
+          <Property Name="BloodMax" Type="int" />
+        </EntityType>
+        <EntityType Name="UserMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MenuName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="MenuCode" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Note" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ParentId" Type="int" />
+          <Property Name="MenuLevel" Type="int" />
+          <Property Name="Icon" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="Note" Type="varchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="UserTypeToMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserTypeId" Type="int" Nullable="false" />
+          <Property Name="MenuId" Type="int" Nullable="false" />
+          <Property Name="Note" Type="varchar" MaxLength="500" />
+          <Property Name="Created" Type="datetime" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <EntityType Name="WebLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Content" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Created" Type="datetime" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="200" />
+          <Property Name="Status" Type="int" />
+          <Property Name="LogLevel" Type="int" />
+          <Property Name="LogName" Type="varchar" MaxLength="200" />
+          <Property Name="ClientIp" Type="varchar" MaxLength="100" />
+          <Property Name="Method" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“WebDB.dbo.DeviceAndUser”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="DeviceAndUser">
+          <Key>
+            <PropertyRef Name="DeviceId" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Imei" />
+          </Key>
+          <Property Name="DeviceId" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="IconId" Type="int" />
+          <Property Name="Imei" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="LoginName" Type="varchar" MaxLength="200" />
+          <Property Name="Status" Type="int" />
+          <Property Name="Created" Type="datetime" />
+          <Property Name="BingDoctorId" Type="int" />
+          <Property Name="APIDeviceId" Type="int" />
+          <Property Name="UserName" Type="varchar" MaxLength="100" />
+          <Property Name="Sex" Type="int" />
+        </EntityType>
+        <!--生成过程中发现错误:
+警告 6002: 表/视图“WebDB.dbo.SortMenu”未定义主键。已推断出该键，并将定义创建为只读的表/视图。-->
+        <EntityType Name="SortMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="MenuName" />
+            <PropertyRef Name="MenuCode" />
+            <PropertyRef Name="Url" />
+            
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="MenuName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="MenuCode" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Url" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="Note" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ParentId" Type="int" />
+          <Property Name="MenuLevel" Type="int" />
+          <Property Name="Icon" Type="varchar" MaxLength="100" />
+          <Property Name="UserTypeId" Type="int" />
+          <Property Name="Created" Type="datetime" />
+          <Property Name="Path" Type="varchar" MaxLength="201" />
+        </EntityType>
+        <EntityContainer Name="WebDBModelStoreContainer">
+          <EntitySet Name="CmdConfig" EntityType="Self.CmdConfig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CmdLog" EntityType="Self.CmdLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CmdQueue" EntityType="Self.CmdQueue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Device" EntityType="Self.Device" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Doctor" EntityType="Self.Doctor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Img" EntityType="Self.Img" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Notice" EntityType="Self.Notice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SysConfig" EntityType="Self.SysConfig" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserMenu" EntityType="Self.UserMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserType" EntityType="Self.UserType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserTypeToMenu" EntityType="Self.UserTypeToMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WebLog" EntityType="Self.WebLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DeviceAndUser" EntityType="Self.DeviceAndUser" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DeviceAndUser].[DeviceId] AS [DeviceId], 
+    [DeviceAndUser].[UserId] AS [UserId], 
+    [DeviceAndUser].[IconId] AS [IconId], 
+    [DeviceAndUser].[Imei] AS [Imei], 
+    [DeviceAndUser].[LoginName] AS [LoginName], 
+    [DeviceAndUser].[Status] AS [Status], 
+    [DeviceAndUser].[Created] AS [Created], 
+    [DeviceAndUser].[BingDoctorId] AS [BingDoctorId], 
+    [DeviceAndUser].[APIDeviceId] AS [APIDeviceId], 
+    [DeviceAndUser].[UserName] AS [UserName], 
+    [DeviceAndUser].[Sex] AS [Sex]
+    FROM [dbo].[DeviceAndUser] AS [DeviceAndUser]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SortMenu" EntityType="Self.SortMenu" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SortMenu].[Id] AS [Id], 
+    [SortMenu].[MenuName] AS [MenuName], 
+    [SortMenu].[MenuCode] AS [MenuCode], 
+    [SortMenu].[Url] AS [Url], 
+    [SortMenu].[Note] AS [Note], 
+    [SortMenu].[ParentId] AS [ParentId], 
+    [SortMenu].[MenuLevel] AS [MenuLevel], 
+    [SortMenu].[Icon] AS [Icon], 
+    [SortMenu].[UserTypeId] AS [UserTypeId], 
+    [SortMenu].[Created] AS [Created], 
+    [SortMenu].[Path] AS [Path]
+    FROM [dbo].[SortMenu] AS [SortMenu]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WebDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Device">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Imei" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Precision="3" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="IconId" Type="Int32" />
+          <Property Name="APIDeviceModel" Type="Int32" />
+          <Property Name="APIDeviceId" Type="Int32" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Doctor">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="DoctorInfo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Subject" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Hospital" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Img">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ImgPath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="ObjId" Type="Int32" Nullable="false" />
+          <Property Name="ImgType" Type="Int32" Nullable="false" />
+          <Property Name="ClickUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Alt" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="UploadTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Notice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="800" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreateUser" Type="Int32" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="CreateUserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SysConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LoginUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="LoginBackImgId" Type="Int32" />
+          <Property Name="SysName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Version" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ICP" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="JsVersion" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LoginName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PhoneNum" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pwd" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RegisterTime" Type="DateTime" Precision="3" />
+          <Property Name="HeadImgId" Type="Int32" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UserTypeId" Type="Int32" />
+          <Property Name="Sex" Type="Int32" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="BirthDate" Type="DateTime" Precision="3" />
+          <Property Name="UserInfo" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="LastLoginTime" Type="DateTime" Precision="3" />
+          <Property Name="LastLoginIp" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PwdKey" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="APIToken" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="APIUserId" Type="Int32" />
+          <Property Name="BingDoctorId" Type="Int32" />
+          <Property Name="HeartMin" Type="Int32" />
+          <Property Name="HeartMax" Type="Int32" />
+          <Property Name="BloodMin" Type="Int32" />
+          <Property Name="BloodMax" Type="Int32" />
+        </EntityType>
+        <EntityType Name="UserMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MenuName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ParentId" Type="Int32" />
+          <Property Name="MenuLevel" Type="Int32" />
+          <Property Name="Icon" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MenuCode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="UserType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="UserTypeToMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserTypeId" Type="Int32" Nullable="false" />
+          <Property Name="MenuId" Type="Int32" Nullable="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Created" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+        </EntityType>
+        <EntityType Name="WebLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Created" Type="DateTime" Precision="3" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="LogLevel" Type="Int32" />
+          <Property Name="LogName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ClientIp" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Method" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="WebDBEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Devices" EntityType="Self.Device" />
+          <EntitySet Name="Doctors" EntityType="Self.Doctor" />
+          <EntitySet Name="Imgs" EntityType="Self.Img" />
+          <EntitySet Name="Notices" EntityType="Self.Notice" />
+          <EntitySet Name="SysConfigs" EntityType="Self.SysConfig" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="UserMenus" EntityType="Self.UserMenu" />
+          <EntitySet Name="UserTypes" EntityType="Self.UserType" />
+          <EntitySet Name="UserTypeToMenus" EntityType="Self.UserTypeToMenu" />
+          <EntitySet Name="WebLogs" EntityType="Self.WebLog" />
+          <EntitySet Name="SortMenus" EntityType="WebDBModel.SortMenu" />
+          <EntitySet Name="DeviceAndUsers" EntityType="WebDBModel.DeviceAndUser" />
+          <EntitySet Name="CmdConfigs" EntityType="WebDBModel.CmdConfig" />
+          <EntitySet Name="CmdLogs" EntityType="WebDBModel.CmdLog" />
+          <EntitySet Name="CmdQueues" EntityType="WebDBModel.CmdQueue" />
+        </EntityContainer>
+        <EntityType Name="SortMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="MenuName" />
+            <PropertyRef Name="MenuCode" />
+            <PropertyRef Name="Url" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="MenuName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="MenuCode" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="Note" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ParentId" Type="Int32" />
+          <Property Name="MenuLevel" Type="Int32" />
+          <Property Name="Icon" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="UserTypeId" Type="Int32" />
+          <Property Name="Created" Type="DateTime" Precision="3" />
+          <Property Name="Path" Type="String" MaxLength="201" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DeviceAndUser">
+          <Key>
+            <PropertyRef Name="DeviceId" />
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="Imei" />
+          </Key>
+          <Property Name="DeviceId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="IconId" Type="Int32" />
+          <Property Name="Imei" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LoginName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="Created" Type="DateTime" Precision="3" />
+          <Property Name="BingDoctorId" Type="Int32" />
+          <Property Name="APIDeviceId" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Sex" Type="Int32" />
+        </EntityType>
+        <EntityType Name="CmdConfig">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Model" Type="Int32" Nullable="false" />
+          <Property Name="CmdCode" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="CmdName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DefaultParam" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PutType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="PutValue" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsNowSend" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CmdLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CmdCode" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="CmdName" Type="String" Nullable="false" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="Imei" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SendDate" Type="DateTime" Precision="3" />
+          <Property Name="IsSucess" Type="Boolean" />
+          <Property Name="Response" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="ResponseTime" Type="DateTime" Precision="3" />
+          <Property Name="Param" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Notice" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="SendLoginName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CmdQueue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="APIDeviceId" Type="Int32" Nullable="true" />
+          <Property Name="Model" Type="Int32" Nullable="false" />
+          <Property Name="IMEI" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastExecTime" Type="DateTime" Precision="3" />
+          <Property Name="Created" Type="DateTime" Precision="3" />
+          <Property Name="CmdCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Param" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Notice" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+          <Property Name="ExceTime" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WebDBModelStoreContainer" CdmEntityContainer="WebDBEntities2">
+          <EntitySetMapping Name="Devices">
+            <EntityTypeMapping TypeName="WebDBModel.Device">
+              <MappingFragment StoreEntitySet="Device">
+                <ScalarProperty Name="APIDeviceId" ColumnName="APIDeviceId" />
+                <ScalarProperty Name="APIDeviceModel" ColumnName="APIDeviceModel" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Imei" ColumnName="Imei" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="IconId" ColumnName="IconId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Doctors">
+            <EntityTypeMapping TypeName="WebDBModel.Doctor">
+              <MappingFragment StoreEntitySet="Doctor">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DoctorInfo" ColumnName="DoctorInfo" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Hospital" ColumnName="Hospital" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Imgs">
+            <EntityTypeMapping TypeName="WebDBModel.Img">
+              <MappingFragment StoreEntitySet="Img">
+                <ScalarProperty Name="UploadTime" ColumnName="UploadTime" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ImgPath" ColumnName="ImgPath" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="ObjId" ColumnName="ObjId" />
+                <ScalarProperty Name="ImgType" ColumnName="ImgType" />
+                <ScalarProperty Name="ClickUrl" ColumnName="ClickUrl" />
+                <ScalarProperty Name="Alt" ColumnName="Alt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notices">
+            <EntityTypeMapping TypeName="WebDBModel.Notice">
+              <MappingFragment StoreEntitySet="Notice">
+                <ScalarProperty Name="CreateUserName" ColumnName="CreateUserName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SysConfigs">
+            <EntityTypeMapping TypeName="WebDBModel.SysConfig">
+              <MappingFragment StoreEntitySet="SysConfig">
+                <ScalarProperty Name="JsVersion" ColumnName="JsVersion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LoginUrl" ColumnName="LoginUrl" />
+                <ScalarProperty Name="LoginBackImgId" ColumnName="LoginBackImgId" />
+                <ScalarProperty Name="SysName" ColumnName="SysName" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="ICP" ColumnName="ICP" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="WebDBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="BloodMax" ColumnName="BloodMax" />
+                <ScalarProperty Name="BloodMin" ColumnName="BloodMin" />
+                <ScalarProperty Name="HeartMax" ColumnName="HeartMax" />
+                <ScalarProperty Name="HeartMin" ColumnName="HeartMin" />
+                <ScalarProperty Name="BingDoctorId" ColumnName="BingDoctorId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+                <ScalarProperty Name="PhoneNum" ColumnName="PhoneNum" />
+                <ScalarProperty Name="Pwd" ColumnName="Pwd" />
+                <ScalarProperty Name="RegisterTime" ColumnName="RegisterTime" />
+                <ScalarProperty Name="HeadImgId" ColumnName="HeadImgId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="UserInfo" ColumnName="UserInfo" />
+                <ScalarProperty Name="LastLoginTime" ColumnName="LastLoginTime" />
+                <ScalarProperty Name="LastLoginIp" ColumnName="LastLoginIp" />
+                <ScalarProperty Name="PwdKey" ColumnName="PwdKey" />
+                <ScalarProperty Name="APIToken" ColumnName="APIToken" />
+                <ScalarProperty Name="APIUserId" ColumnName="APIUserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserMenus">
+            <EntityTypeMapping TypeName="WebDBModel.UserMenu">
+              <MappingFragment StoreEntitySet="UserMenu">
+                <ScalarProperty Name="MenuCode" ColumnName="MenuCode" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="MenuLevel" ColumnName="MenuLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTypes">
+            <EntityTypeMapping TypeName="WebDBModel.UserType">
+              <MappingFragment StoreEntitySet="UserType">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserTypeToMenus">
+            <EntityTypeMapping TypeName="WebDBModel.UserTypeToMenu">
+              <MappingFragment StoreEntitySet="UserTypeToMenu">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="MenuId" ColumnName="MenuId" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WebLogs">
+            <EntityTypeMapping TypeName="WebDBModel.WebLog">
+              <MappingFragment StoreEntitySet="WebLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LogLevel" ColumnName="LogLevel" />
+                <ScalarProperty Name="LogName" ColumnName="LogName" />
+                <ScalarProperty Name="ClientIp" ColumnName="ClientIp" />
+                <ScalarProperty Name="Method" ColumnName="Method" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SortMenus">
+            <EntityTypeMapping TypeName="WebDBModel.SortMenu">
+              <MappingFragment StoreEntitySet="SortMenu">
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="MenuLevel" ColumnName="MenuLevel" />
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="MenuCode" ColumnName="MenuCode" />
+                <ScalarProperty Name="MenuName" ColumnName="MenuName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DeviceAndUsers">
+            <EntityTypeMapping TypeName="WebDBModel.DeviceAndUser">
+              <MappingFragment StoreEntitySet="DeviceAndUser">
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="APIDeviceId" ColumnName="APIDeviceId" />
+                <ScalarProperty Name="BingDoctorId" ColumnName="BingDoctorId" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+                <ScalarProperty Name="Imei" ColumnName="Imei" />
+                <ScalarProperty Name="IconId" ColumnName="IconId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CmdConfigs">
+            <EntityTypeMapping TypeName="WebDBModel.CmdConfig">
+              <MappingFragment StoreEntitySet="CmdConfig">
+                <ScalarProperty Name="IsNowSend" ColumnName="IsNowSend" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="PutValue" ColumnName="PutValue" />
+                <ScalarProperty Name="PutType" ColumnName="PutType" />
+                <ScalarProperty Name="DefaultParam" ColumnName="DefaultParam" />
+                <ScalarProperty Name="CmdName" ColumnName="CmdName" />
+                <ScalarProperty Name="CmdCode" ColumnName="CmdCode" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CmdLogs">
+            <EntityTypeMapping TypeName="WebDBModel.CmdLog">
+              <MappingFragment StoreEntitySet="CmdLog">
+                <ScalarProperty Name="CmdName" ColumnName="CmdName" />
+                <ScalarProperty Name="SendLoginName" ColumnName="SendLoginName" />
+                <ScalarProperty Name="Notice" ColumnName="Notice" />
+                <ScalarProperty Name="Param" ColumnName="Param" />
+                <ScalarProperty Name="ResponseTime" ColumnName="ResponseTime" />
+                <ScalarProperty Name="Response" ColumnName="Response" />
+                <ScalarProperty Name="IsSucess" ColumnName="IsSucess" />
+                <ScalarProperty Name="SendDate" ColumnName="SendDate" />
+                <ScalarProperty Name="Imei" ColumnName="Imei" />
+                <ScalarProperty Name="CmdCode" ColumnName="CmdCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CmdQueues">
+            <EntityTypeMapping TypeName="WebDBModel.CmdQueue">
+              <MappingFragment StoreEntitySet="CmdQueue">
+                <ScalarProperty Name="ExceTime" ColumnName="ExceTime" />
+                <ScalarProperty Name="Notice" ColumnName="Notice" />
+                <ScalarProperty Name="Param" ColumnName="Param" />
+                <ScalarProperty Name="CmdCode" ColumnName="CmdCode" />
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="LastExecTime" ColumnName="LastExecTime" />
+                <ScalarProperty Name="IMEI" ColumnName="IMEI" />
+                <ScalarProperty Name="Model" ColumnName="Model" />
+                <ScalarProperty Name="APIDeviceId" ColumnName="APIDeviceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

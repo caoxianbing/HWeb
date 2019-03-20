@@ -1,0 +1,113 @@
+﻿
+@{
+    ViewBag.Title = "历史轨迹";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+
+<style type="text/css">
+     .d_layout,html, body {
+        height:100% !important;
+        margin:0;
+        padding:0;
+    }
+    #h_all {
+        padding:0;
+        height:100%;
+    }
+    #ha_sel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 5px 0;
+        background-color: white;
+        box-shadow: 1px 1px 50px rgba(0,0,0,.3);
+        height:40px;
+        border-radius:0;
+    }
+    .layui-form-label {
+       width:60px !important;
+    }
+    #h_speed {
+         position: absolute;
+        top: 55px;
+        left: 0;
+        padding: 5px 0;
+        background-color: white;
+        box-shadow: 1px 1px 50px rgba(0,0,0,.3);
+        height:320px;
+        padding:5px 10px;
+        text-align:center;
+    }
+    #h_progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width:100%;
+        cursor:pointer;
+    }
+     .ul_temple > li {
+                text-decoration: none;
+                padding: 2px 10px !important;
+                font-family: "microsoft yahei" !important;
+                font-size:13px;
+            }
+</style>
+
+<div id="h_all">
+    
+</div>
+<div id="ha_sel">
+    <form class="layui-form" lay-filter="form1" id="form1" onsubmit="return false;">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">选择设备</label>
+                <div class="layui-input-inline">
+                    <select id="sel_device" name="modules" lay-search="">
+                        <option value="0">请选择设备</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">时间段</label>
+                <div class="layui-input-inline" style="width:300px;">
+                    <input type="text" class="layui-input" id="txt_time" placeholder=" ~ ">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="loadHistory();">播&nbsp;&nbsp;放</button>
+                &nbsp;&nbsp;
+                <button class="layui-btn layui-btn-warm layui-btn-sm" id="btn_ss" onclick="stopOrStart(this)">暂&nbsp;&nbsp;停</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div id="h_speed">
+    播放<br/>
+    速度<br/>
+    <br />
+    <span style="font-size:14px;color:#009688">快</span>
+    <br/>
+    <div id="slispeed" style="margin:7px 0 7px -35px; display: inline-block;"></div>
+    <br/>
+<span style="font-size:14px;color:#c2c2c2">慢</span>
+</div>
+
+<div id="h_progress">
+    <div class="layui-progress layui-progress-big" onclick="proClick(this)" title="单击调整播放进度" lay-filter="pro_his" lay-showpercent="true">
+        <div class="layui-progress-bar layui-bg-green" style="border-radius:0 !important;" lay-percent="0%"></div>
+    </div>
+</div>
+
+<div id="ma_dtemple" style="display:none;">
+    <ul class="ul_temple">
+        <li><b>经纬度</b>：{latlng}</li>
+        <li><b>时间</b>：{time}</li>
+        <li><b>速度</b>：{speed} KM/H</li>
+    </ul>
+</div>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=bh1pq5GICGaHuZG6eMsdnhal"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/LuShu/1.2/src/LuShu_min.js"></script>
+<script src="~/Scripts/baiduMap.js?v=@ConstVal.WebConfig.JsVersion"></script>
+<script src="~/Scripts/history.js?v=@ConstVal.WebConfig.JsVersion"></script>
+

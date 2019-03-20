@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "ERROR";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+
+
+
+<div style="width:400px;margin:30px auto;text-align:center;box-shadow:2px  2px 2px 2px #555;padding:60px;border-radius:10px;">
+    <h2>服务内部错误</h2>
+    <br />
+    <img src="~/Content/images/404error.jpg" style="width:240px;" />
+
+    <br /><br />
+    <div style="width: 216px; margin:20px 0;">
+        <!-- layui 2.2.5 新增 -->
+        <button class="layui-btn layui-btn-normal" onclick="history.go(-1);">返回上一页</button>
+        <br /><br />
+        <button class="layui-btn layui-btn-normal" onclick="if (!parent) location.href = '/Home/Index'; else parent.location.href = '/Home/Index';">返回网站首页</button>
+
+    </div>
+</div>

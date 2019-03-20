@@ -1,0 +1,25 @@
+﻿
+ .fz16 {
+        font-size: 16px !important;
+    }
+.clear {
+    clear:both;
+}
+  .layui-elem-quote {
+      padding:8px 10px !important;
+    }
+.a-self {
+    color:#01AAED;
+}
+    .a-self:hover {
+        color:#1E9FFF;
+    }
+.layui-upload-img {
+    width:500px !important;
+}
+.img_head {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50%;
+    vertical-align: bottom;
+}

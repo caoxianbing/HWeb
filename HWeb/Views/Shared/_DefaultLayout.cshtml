@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @*<link href="~/Scripts/layui/css/layui.css?v=@ConstVal.WebConfig.JsVersion" rel="stylesheet" />*@
+    <link href="~/Content/css/layui.css?v=@ConstVal.WebConfig.JsVersion" rel="stylesheet" />
+    <link href="~/Content/css/page.css?v=@ConstVal.WebConfig.JsVersion" rel="stylesheet" />
+    <script src="~/Scripts/layui/layui.all.js?v=@ConstVal.WebConfig.JsVersion"></script>
+    <script src="~/Scripts/page.js?v=@ConstVal.WebConfig.JsVersion"></script>
+</head>
+<body>
+    <div class="d_layout">
+        @RenderBody()
+    </div>
+    <script type="text/javascript">
+        window.onload = function () {
+            parent.iframeLoad && parent.layer.close(parent.iframeLoad);
+        }
+    </script>
+</body>
+</html>

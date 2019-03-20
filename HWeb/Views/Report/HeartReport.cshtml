@@ -1,0 +1,263 @@
+﻿
+@{
+    ViewBag.Title = "心率统计";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+    #br_all {
+        padding: 10px;
+    }
+
+    #brab_pic {
+        width: 800px;
+        height: 400px;
+        margin: 0 auto;
+    }
+
+    .btn_title {
+        background-color: transparent;
+        border: none;
+        color: black;
+        font-size: 16px;
+    }
+
+        .btn_title:hover {
+            color: black;
+        }
+</style>
+<div id="br_all">
+    <div class="bra_head">
+        <form class="layui-form" lay-filter="form1" id="form1" onsubmit="return false;">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">选择设备</label>
+                    <div class="layui-input-inline">
+                        <select id="sel_device" name="modules" lay-search="">
+                            <option value="0">请选择设备</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">时间段</label>
+                    <div class="layui-input-inline" style="width:300px;">
+                        <input type="text" class="layui-input" id="txt_time" placeholder=" ~ ">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-normal" onclick="loadList();">&nbsp;查&nbsp;&nbsp;询&nbsp;</button>
+                    &nbsp;&nbsp;
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="bra_body">
+        <div id="brab_pic"></div>
+        <div class="layui-row">
+            <div class="layui-col-xs6">
+                <div class="grid-demo" style="padding:10px;"><table id="tab_list"></table></div>
+            </div>
+            <div class="layui-col-xs6">
+                <div class="grid-demo" style="padding:10px;">
+                    <table id="tab_days"></table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/html" id="basetitle">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm btn_title">基础数据</button>
+    </div>
+</script>
+<script type="text/html" id="reporttitle">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm btn_title">平均数据</button>
+    </div>
+</script>
+
+<script src="~/Scripts/echarts.min.js"></script>
+<script type="text/javascript">
+    var form = layui.form, laydate = layui.laydate, table = layui.table;
+    var curId = 0,date;
+    $().ready(function () {
+        start = getDateZero();
+        end = getDate();
+        form.render();
+        date = getDateZero() + " ~ " + getDate();
+        //日期时间范围
+        laydate.render({
+            elem: '#txt_time'
+          , type: 'datetime'
+          , range: '~'
+          , value: date
+          , max: getDate()
+          , done: function (value, datetime, endDate) {
+              date = value;
+          }
+        });
+
+        getDevices("#sel_device", 1, 1000);
+
+        //$.post("/Device/AjaxGetDeviceList", { page: 1, limit: 1000 }, function (result) {
+        //     if (typeof result == "string")  result = eval('(' + result + ')');
+        //    $.each(result.data, function (index, item) {
+        //        if (!item.UserName) item.UserName = item.Imei.substring(item.Imei.length - 6, item.Imei.length);
+        //        var _o = '<option value="' + item.DeviceId + '" ' + ((curId == item.DeviceId) && "selected") + ' >' + item.UserName + '</option>';
+        //        $("#sel_device").append(_o);
+        //        form.render();
+        //    });
+        //});
+    })
+
+
+    function loadList() {
+
+        var _id = $("#sel_device").val();
+        if (_id <= 0) {
+            layer.alert("请选择设备！", { icon: 5 });
+            return;
+        }
+        var l = layer.load();
+        table.render({
+            elem: '#tab_list'
+       , url: '/Report/AjaxGetHealthList' //数据接口
+       , cols: [[ //表头
+            {
+                field: 'LastUpdate', title: '测量时间', sort:true
+            },
+           {
+               field: 'Heartbeat', title: '心率', sort: true
+           }
+       ]]
+            , done: function (res, curr, count) {
+                if (res.data.length == 0) {
+                    layer.msg("该时间段暂无数据");
+                }
+                layer.close(l);
+                drawPic(res);
+                dayTab(res.extend);
+            }
+            , where: { deviceId: _id, date: date, type: 1 }
+            , page: false
+           , toolbar: '#basetitle'
+            , loading:true
+            , defaultToolbar: [ 'print', 'exports']
+        });
+    }
+    function drawPic(res) {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('brab_pic'));
+
+        var data = [], data1 = [], data2 = [];
+        $.each(res.data, function (index, item) {
+            data.push({
+                name: item.LastUpdate,
+                value: [
+                  item.LastUpdate,
+                   item.Heartbeat
+                ]
+            });
+            data1.push({
+                name: item.LastUpdate,
+                value: [
+                  item.LastUpdate,
+                   item.Diastolic
+                ]
+            });
+            data2.push({
+                name: item.LastUpdate,
+                value: [
+                  item.LastUpdate,
+                   item.Shrink
+                ]
+            });
+        });
+
+        option = {
+            title: {
+                text: '健康数据'
+            },
+            legend: {
+                data: ['心率']
+            },
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    var _html = params[0].data.name+"<br/>";
+                    _html += "心率：" + params[0].data.value[1] + "<br/>";
+               
+                    return _html;
+
+                }
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'time',
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                type: 'value',
+                boundaryGap: [0, '100%'],
+                splitLine: {
+                    show: true
+                },
+                max:200
+            },
+            series: [{
+                name: '心率',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                stack: 't',
+                data: data
+            },
+            {
+                name: '收缩压',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                stack: 't1',
+                data: data1
+            }
+            ,
+            {
+                name: '舒张压',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                stack: 't2',
+                data: data2
+            }
+            ]
+        };
+
+        myChart.setOption(option);
+    }
+
+    function dayTab(data) {
+        table.render({
+            elem: '#tab_days'
+     , data: data //数据接口
+     , cols: [[ //表头
+          {
+              field: 'DateKey', title: '时间段', sort: true
+          },
+         {
+             field: 'Avg', title: '心率', sort: true
+         }
+     ]]
+           , toolbar: '#reporttitle'
+          , defaultToolbar: ['print', 'exports']
+        });
+    }
+</script>
+
+

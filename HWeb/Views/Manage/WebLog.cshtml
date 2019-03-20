@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "操作日志";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+    #wl_all {
+        padding:10px;
+    }
+    .a_down {
+        cursor: pointer;
+        color: #009688;
+    }
+        .a_down:hover {
+            color:#01AAED;
+        }
+</style>
+<div id="wl_all">
+    <div>
+        <div class="layui-inline">
+            <label class="layui-form-label">选择日期</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="log_date" placeholder="yyyy-MM-dd">
+            </div>
+        </div>
+        <div class="layui-inline" style="float:right;">
+            <a class="a_down" href="/Other/GetWebLogFile">下载日志文件</a>
+        </div>
+    </div>
+    <table id="tab_logs"></table>
+</div>
+
+
+<script type="text/javascript">
+    var table = layui.table, form = layui.form, laydate = layui.laydate;
+    var date,tab_logs;
+    $().ready(function () {
+
+
+        var myDate = new Date();
+        date = myDate.getFullYear() + "-" + (myDate.getMonth() + 1) + "-" + myDate.getDate();
+        $(".a_down").attr("href", "/Other/GetWebLogFile?date=" + date);
+        //常规用法
+        laydate.render({
+            elem: '#log_date',
+            done: function (value, date) {
+                date = value;
+                $(".a_down").attr("href", "/Other/GetWebLogFile?date=" + date);
+                tab_logs.reload({
+                    where: { date: date }
+                });
+            },
+            min:'2018-11-01',
+            max: 0,
+            value:date,
+            isInitValue: true
+        });
+
+       var tab_logs=table.render({
+            elem: '#tab_logs',
+            url: '/Other/GetWebLog',
+            limit: 50,
+            limits: [50,100, 200, 300, 400, 1000],
+            page: true,
+            where:{date:date},
+            cols: [[
+                { field: 'Id', title: '编号', width: 60 },
+                 { field: 'Created', title: '时间', width: 180 },
+                {
+                    field: 'All', title: '内容', templet: function (d) {
+                        return d.Content;
+                    }
+                },
+                { field: 'UserName', title: '用户', width: 150 },
+                {
+                    field: 'LogLevel', title: '等级', width: 80, templet: function (d) {
+
+                        if (d.LogLevel == "1") {
+                            return "正常";
+                        } else if (d.LogLevel == "2") {
+                            return "<span style='color:#de7c7c'>敏感</span>";
+                        } else if (d.LogLevel == "3") {
+                            return "<span style='color:#01AAED'>警告</span>";
+                        } else if (d.LogLevel == "4") {
+                            return "<span style='color:red'>错误</span>";
+                        }
+                    }
+                },
+            { field: 'ClientIp', title: 'Ip', width: 150 }
+           ]]
+        });
+    });
+</script>

@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewBag.Title = "居民列表";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+
+    .um_headimg {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+    }
+    .a-self:hover {
+        color:#009688;
+        cursor:pointer;
+    }
+</style>
+<div style="padding:20px;">
+    <div class="layui-row">
+        <div class="layui-col-md10">
+            <div class="grid-demo grid-demo-bg1"><p><i class="layui-icon">&#xe60a;</i> 居民列表</div>
+        </div>
+        <div class="layui-col-md2" id="bind_user">
+            <div class="grid-demo">
+                <div style="float:right;"><button onclick="bind()" class="layui-btn layui-btn-primary layui-btn-sm" >绑定居民</button></div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+    <table id="tab_list" lay-filter="tab_list"></table>
+</div>
+@Html.Partial("~/Views/Shared/_CmdDiv.cshtml")
+<script type="text/javascript">
+    var table = layui.table, form = layui.form;
+    //w1弹出所有图标，w2弹出菜单详细
+    var  w2;
+    $().ready(function () {
+        if (getUserType() != 3)
+            $("#bind_user").hide();
+        table.render({
+            elem: '#tab_list'
+         , url: '/User/AjaxGetUsers' //数据接口
+         , page: true //开启分页
+         , cols: [[ //表头
+              {
+                  field: 'HeadImgId', title: '', width: 70, templet: function (d) {
+                      return '<img class="um_headimg" src="/Other/GetImg?id=' + d.HeadImgId + '" />';
+                  }
+              },
+             {
+                 field: 'Id', title: 'ID',width:80  
+             },
+             {
+                 field: 'UserName', title: '居民姓名'
+             },
+            {
+                field: 'LoginName', title: '账号'
+            },
+             { field: 'PhoneNum', title: '手机号码' },
+             { field: 'Email', title: '邮箱'},
+             {
+                 field: 'Sex', title: '性别', width: 60, templet: function (d) {
+                     if (d.Sex == 1) {
+                         return "<i class='layui-icon' style='color:#1E9FFF'>&#xe662;</i>";
+                     }
+                     else if (d.Sex == 0) {
+                         return "<i class='layui-icon' style='color:#f69ed1'>&#xe661;</i>";
+                     }
+                     else
+                         return "";
+                 }
+             },
+              {
+                  field: 'Cmd', title: '设备指令', width: 100, templet: function (d) {
+                      return "<a class='a-self' onclick='openCmd(1," + d.Id + ")'>下发指令</a>";
+                  }
+              },
+            {
+                field: 'Pro', title: '操作', width: 140, templet: function (d) {
+                    var _name = "'" + d.LoginName + "'";
+
+                    return '<button class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit(' + d.Id + ');">&nbsp;&nbsp;&nbsp;<i class="layui-icon">&#xe642;</i>&nbsp;&nbsp;</button>&nbsp;<button class="layui-btn layui-btn-primary layui-btn-xs" onclick="del(' + d.Id + ',' + _name + ')">&nbsp;&nbsp;&nbsp;<i class="layui-icon" style="color:red">&#xe640;</i>&nbsp;&nbsp;</button>';
+                }
+            }
+         ]]
+            , page: true,
+            limit: 20,
+            limits: [10, 20, 30, 50],
+            where: { type: 4 }
+        });
+    });
+
+    //绑定居民
+    function bind() {
+        layer.prompt({ title: '绑定居民--输入居民账号或手机号码' }, function (val, index) {
+            if (val) {
+                var _wl1 = layer.load();
+                $.post("/User/AjaxBindUserToDoctor", { LoginName: val }, function (result) {
+                    layer.close(_wl1);
+                    result = proResult(result);
+                    if (!isOk(result)) {
+                        layer.alert(result.Message, { icon: 5 });
+                    } else {
+                        layer.close(index);
+                        var _wa1 = layer.alert(result.Message, { icon: 1 }, function () {
+                            layer.close(_wa1);
+                            location.reload();
+                        });
+                    }
+                });
+
+            }
+        });
+    }
+
+    function edit(id) {
+        location.href = "/User/EditUserByManage?userId=" + id;;
+    }
+    
+    //删除
+    function del(id, name) {
+        layer.confirm('确定删除' + name + '？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            var _w = layer.load(0, { shade: false });
+
+            $.post("/User/DeleteUser", { userId: id }, function (result) {
+                layer.close(_w);
+                 if (typeof result == "string")  result = eval('(' + result + ')');
+                if (!isOk(result)) {
+                    layer.alert(result.Message || "删除失败！", { icon: 5 });
+                }
+                else {
+                    layer.alert(result.Message || "删除成功！", { icon: 1 }, function () {
+                        location.reload();
+                    });
+                }
+            });
+
+        }, function () {
+        });
+    }
+
+    function unBind(id, name) {
+        layer.confirm('确定解绑居民' + name + '？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            var _w = layer.load(0, { shade: false });
+
+            $.post("/User/UnBindUser", { userId: id }, function (result) {
+                layer.close(_w);
+                 if (typeof result == "string")  result = eval('(' + result + ')');
+                if (!isOk(result)) {
+                    layer.alert(result.Message || "解绑失败！", { icon: 5 });
+                }
+                else {
+                    var wunbind = layer.alert(result.Message || "解绑成功！", { icon: 1 }, function () {
+                        tab1.reload();
+                        layer.close(wunbind);
+                    });
+                }
+            });
+
+        }, function () {
+        });
+    }
+</script>
+

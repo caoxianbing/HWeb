@@ -1,0 +1,215 @@
+﻿@using HWeb.Entity.WebEntity;
+@{
+    List<UserMenu> ums = ViewBag.Ums as List<UserMenu>;
+
+    ViewBag.Title = "菜单管理";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<div style="padding:20px;">
+    <div class="layui-row">
+        <div class="layui-col-md10">
+            <div class="grid-demo grid-demo-bg1"><p><i class="layui-icon">&#xe60a;</i> 菜单列表</div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="grid-demo">
+                <div style="float:right;"><button onclick="addMenu()" class="layui-btn layui-btn-primary layui-btn-sm">新增菜单</button></div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+    <table id="tab_list" lay-filter="tab_list"></table>
+
+    <div id="d_detail" style="display:none;padding:10px;">
+        <form class="layui-form" lay-filter="form1" id="form1" onsubmit="return false;" action="/Menu/AjaxSubmitMenu">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">ID</label>
+                    <div class="layui-input-inline">
+                        <input type="text" readonly="readonly" style="border:none !important;" id="hid_id" name="Id" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="MenuName" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">菜单Code</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="MenuCode" lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">上级菜单</label>
+                    <div class="layui-input-inline">
+                        <select name="ParentId">
+                            <option value="0">无</option>
+                            @foreach (UserMenu um in ums)
+                            {
+                                <option value="@um.Id">@um.MenuName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">菜单图标</label>
+                <div class="layui-input-block">
+                  <input type="hidden" name="Icon" lay-veriy="required" id="hid_icon" />
+                    <span style="margin-top:10px;display:inline-block"><i class="layui-icon i_icon"></i></span>
+                    <a href="Javascript:changeIcon();" style="color:#5FB878;">&nbsp;&nbsp;&nbsp;选择图标</a>
+                </div>
+            </div>
+
+            <div class="layui-form-item" style="width:500px;">
+                <label class="layui-form-label">菜单Url</label>
+                <div class="layui-input-block">
+                    <input type="text" name="Url" lay-verify="required" autocomplete="off" placeholder="请输入菜单跳转地址" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="width:600px;">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <input type="text" name="Note" autocomplete="off" placeholder="菜单说明" class="layui-input">
+                </div>
+            </div>
+
+            <div style="margin-left:50px;">
+                <button class="layui-btn layui-btn-normal" lay-submit="" id="btn_sub" lay-filter="btn_sub" style="width:100px;letter-spacing:5px;">提交</button>
+                <a href="Javascript:delMenu();" class="a_del" style="margin:40px;vertical-align:bottom;color:red;">
+                    删除该菜单
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@Html.Partial("~/Views/Shared/_IconDiv.cshtml")
+<script type="text/javascript">
+    var table = layui.table, form = layui.form;
+    //w1弹出所有图标，w2弹出菜单详细
+    var w1, w2;
+    $().ready(function () {
+        table.render({
+            elem: '#tab_list'
+         , url: '/Menu/AjaxGetAllMenu' //数据接口
+         , page: true //开启分页
+         , cols: [[ //表头
+             {
+                 field: "IsMain", title: "", width: 60, templet: function (d) {
+                     if (d.MenuLevel == 1) {
+                         return "<i class='layui-icon' style='font-size:12px'>&#xe66b;</i>";
+                     }
+                     else return "";
+                 }
+             },
+             {
+                 field: 'Id', title: 'ID', width: 80
+             }
+            , {
+                field: 'MenuName', title: '菜单名称', templet: function (d) {
+                    return "<i class='layui-icon'>" + d.Icon + "</i>&nbsp;" + d.MenuName;
+                }
+            }
+            , { field: 'MenuCode', title: '菜单Code', width: 200 }
+            , { field: 'Url', title: '地址', width: 300 }
+            , { field: 'ParentId', title: '上级菜单Id', width: 120 }
+         ]]
+            , page: false
+        });
+
+        //监听行单击事件（单击事件为：rowDouble）
+        table.on('row(tab_list)', function (obj) {
+            var data = obj.data;
+            w2 = layer.open({
+                title: '修改菜单 ' + obj.data.MenuName,
+                type: 1,
+                content: $("#d_detail"),
+                area: ['700px', '400px;']
+            });
+            //标注选中样式
+            obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+
+            var _icon = data.Icon;
+            data.Icon = escape(data.Icon);
+            form.val("form1", data);
+            $(".i_icon").html(_icon);
+            form.render();
+        });
+
+        //监听提交事件
+        formSub({
+            form: form, layer: layer, btn: "btn_sub", msg: "提交中...", okFunc: function (result) {
+                 if (typeof result == "string")  result = eval('(' + result + ')');
+                layer.alert("保存成功", { icon: 1 }, function () {
+                    layer.close(w2);
+                    location.reload();
+                })
+            }, beforeSub: function () {
+                if (!$("#hid_icon").val()) {
+                    layer.msg("请选择图标", { icon: 0 });
+                    return false;
+                }
+                return true;
+            }
+        });
+
+    });
+   
+    //加载图标
+    loadIcon(function (text) {
+        $("#hid_icon").val(escape(text));
+        $(".i_icon").html(text);
+        layer.close(w1);
+    });
+    function changeIcon() {
+        w1 = layer.open({
+            title: '选择图标',
+            type: 1,
+            content: $("#d_icons"),
+            area: ['500px', '400px;']
+        });
+    }
+
+    function addMenu() {
+        //重置表单
+        document.getElementById("form1").reset();
+        $("#hid_icon").val("");
+        $(".i_icon").html("&nbsp;&nbsp;");
+        w2 = layer.open({
+            title: '添加菜单',
+            type: 1,
+            content: $("#d_detail"),
+            area: ['700px', '400px;']
+        });
+        $(".a_del").hide();
+    }
+
+    //删除菜单
+    function delMenu() {
+        layer.confirm('确定删除该菜单？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            var _w = layer.load(0, { shade: false });
+
+            $.post("/Menu/AjaxDelMenu", { id: $("#hid_id").val() }, function (result) {
+                layer.close(_w);
+                if (!isOk(result)) {
+                    layer.alert(result.Message || "操作失败！", { icon: 5 });
+                }
+                else {
+                    layer.alert(result.Message || "操作成功！", { icon: 1 }, function () {
+                        location.reload();
+                    });
+                }
+            });
+
+        }, function () {
+        });
+    }
+</script>

@@ -1,0 +1,308 @@
+﻿@using HWeb.Entity.WebEntity
+@{
+
+    Doctor doctor = new Doctor();
+    User user = ViewBag.User as User;
+    if (user.UserTypeId == 3)
+    {
+        doctor = (ViewBag.Doctor as Doctor) ?? new Doctor();
+    }
+    string action = "AjaxEditUser";
+    string userType = "居民";
+    if (user.UserTypeId == 1)
+    {
+        userType = "超级管理员";
+    }
+    if (user.UserTypeId == 2)
+    {
+        userType = "管理员";
+
+    }
+    if (user.UserTypeId == 3)
+    {
+        userType = "医生";
+        action = "AjaxEditDoctor";
+    }
+
+    ViewBag.Title = "修改用户信息";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+    #eum_all {
+        padding: 15px;
+        margin-bottom: 30px;
+    }
+
+    .no_border {
+        border: none !important;
+    }
+
+    .layui-input-inline {
+        width: 220px !important;
+    }
+
+    .img_head {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        vertical-align: bottom;
+    }
+
+    #d_btn {
+        position: fixed;
+        bottom: 10px;
+        right: 40px;
+    }
+
+    .sp_alt {
+        color: #5FB878;
+        font-size: 12px;
+    }
+</style>
+<div id="eum_all">
+    <form class="layui-form" onsubmit="return false;" action="@action">
+        <div>
+            <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+                <div id="test13">头像</div>
+            </blockquote>
+                @Html.Partial("~/Views/Shared/_UploadImg.cshtml")
+            <input type="hidden" id="hid_bimg" value="@user.HeadImgId" />
+        </div>
+        <div>
+            <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+                <div id="test2">基本信息</div>
+            </blockquote>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">Id</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Id" id="txt_id" readonly="readonly" value="@user.Id" class="layui-input no_border">
+                        <input type="hidden" name="Status" value="@user.Status" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="LoginName" id="txt_ln" readonly="readonly" value="@user.LoginName" class="layui-input no_border">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="UserName" lay-verify="required" value="@user.UserName" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号码</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="PhoneNum" lay-verify="required|phone" value="@user.PhoneNum" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户角色</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="UserType" value="@userType" class="layui-input no_border" readonly="readonly">
+                        <input type="hidden" id="hid_utype" name="UserTypeId" value="@user.UserTypeId" />
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="Email" value="@user.Email" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="Sex" value="1" title="男" @(user.Sex == 1 ? "checked" : "")>
+                        <input type="radio" name="Sex" value="0" title="女" @(user.Sex == 0 ? "checked" : "")>
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label">生日</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="BirthDate" id="txt_bd" autocomplete="off" value="@user.BirthDate" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">注册时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="RegisterTime" readonly="readonly" value="@user.RegisterTime" class="no_border layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="LastLoginTime" readonly="readonly" value="@user.LastLoginTime" class="no_border layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">登陆IP</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="LastLoginIp" readonly="readonly" value="@user.LastLoginIp" class="no_border layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">其他信息</label>
+                <div class="layui-input-block" style="width:570px;">
+                    <textarea placeholder="请输入内容" name="UserInfo" class="layui-textarea">@user.UserInfo</textarea>
+                </div>
+            </div>
+        </div>
+        @if (user.UserTypeId == 4)
+        {
+            <div>
+                <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+                    <div id="test2">其他信息</div>
+                </blockquote>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">绑定医生</label>
+                    <div class="layui-input-block" style="width:320px;">
+                        <input type="text" name="BindDoctorName" autocomplete="off" value="@user.BindDoctorName" id="txt_doctor" placeholder="请输入医生的账号" class="layui-input">
+                        <span class="sp_alt">*医生的登录账号</span>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">绑定设备</label>
+                    <div class="layui-input-inline" style="width:320px;">
+                        @{
+                            string _str = "";
+                            if (!string.IsNullOrWhiteSpace(user.IMEI))
+                            {
+                                _str = "readonly='readonly'";
+                            }
+                            <input type="text" name="IMEI" autocomplete="off" @_str id="txt_imei" placeholder="请输入设备的IMEI" value="@user.IMEI" class="layui-input">
+
+                            <span class="sp_alt">*IMEI必须先在设备平台存在</span>
+                        }
+
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(user.IMEI))
+                    {
+                        <button class="layui-btn layui-btn-sm" style="margin-top:7px;" onclick="unBind('@user.IMEI')">解绑</button>
+                    }
+                    else
+                    {
+                        <button class="layui-btn layui-btn-sm" style="margin-top:7px;" onclick="exec('@user.IMEI',2)">绑定</button>
+                    }
+                </div>
+            </div>
+                            }
+        @if (user.UserTypeId == 3)
+        {
+            <div>
+                <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+                    <div id="test2">医生信息</div>
+                </blockquote>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">职称</label>
+                    <div class="layui-input-block" style="width:400px">
+                        <input type="text" name="Position" lay-verify="required" value="@doctor.Position" autocomplete="off" placeholder="请输入医生的职称" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">任职医院</label>
+                    <div class="layui-input-block" style="width:400px">
+                        <input type="text" name="Hospital" lay-verify="required" value="@doctor.Hospital" autocomplete="off" placeholder="请输入医生的任职医院" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">擅长科目</label>
+                    <div class="layui-input-block" style="width:400px">
+                        <input type="text" name="Subject" lay-verify="required" value="@doctor.Subject" autocomplete="off" placeholder="请输入医生擅长的科目" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">详细介绍</label>
+                    <div class="layui-input-block" style="width:570px;">
+                        <textarea placeholder="请输入医生的详细介绍" name="DoctorInfo" class="layui-textarea">@doctor.DoctorInfo</textarea>
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="d_btn">
+            &nbsp;&nbsp;<button class="layui-btn layui-btn-normal" lay-filter="btn_sub" onclick="resetPwd(@user.Id);" lay-submit="" style="width:130px;">保&nbsp;&nbsp;存</button>
+
+
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    var form = layui.form, laydate = layui.laydate;
+    $().ready(function () {
+
+        initImg("/Other/GetImg?id=" + $("#hid_bimg").val(), $("#txt_id").val(), 1, $("#hid_imgid").val(),"");
+        setSuccess(changeHeadImg);
+        form.render();
+        //常规用法
+        laydate.render({
+            elem: '#txt_bd',type:"datetime",format: 'yyyy/MM/dd HH:mm:ss'
+        });
+
+        //监听提交事件
+        formSub({
+            form: form, layer: layer, btn: "btn_sub", msg: "提交中...", okFunc: function (result) {
+                 if (typeof result == "string")  result = eval('(' + result + ')');
+                layer.alert("保存成功", { icon: 1 }, function () {
+                    location.reload();
+                })
+            }
+        });
+    });
+
+    function exec(imei, type) {
+        if (type == 1) {
+            w3=layer.confirm('确定解绑该设备？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                doAjax(imei, type, "");
+            }, function () {
+            });
+        }
+        else if (type == 2) {
+            imei = $("#txt_imei").val();
+            if (imei.length == 0) {
+                layer.alert("请输入IMEI号", { icon: 5 });
+                return;
+            }
+            var _ln=$("#txt_ln").val();
+            doAjax(imei, type, _ln);
+        }
+    }
+
+    function doAjax(imei, type, ln) {
+        var _w = layer.load(0, { shade: false });
+        $.post("/Device/AjaxSubUD", { imei: imei, type: type, loginName: ln }, function (result) {
+             if (typeof result == "string")  result = eval('(' + result + ')');
+            layer.close(_w);
+            if(type==1)
+                layer.close(w3);
+            if (!isOk(result)) {
+                layer.alert(result.Message, { icon: 5 });
+            }
+            else {
+                var wunbind = layer.alert(result.Message, { icon: 1 }, function () {
+                    location.reload();
+                    layer.close(wunbind);
+                });
+            }
+        });
+    }
+</script>

@@ -1,0 +1,180 @@
+﻿@using HWeb.Entity.WebEntity
+@{
+    List<UserMenu> um = ViewBag.Um as List<UserMenu>;
+    User user = ViewBag.User as User;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>@ConstVal.WebConfig.SysName</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <link href="~/Scripts/layui/css/layui.css?v=@ConstVal.WebConfig.JsVersion" rel="stylesheet" />
+    <link href="~/Content/css/index.css?v=@ConstVal.WebConfig.JsVersion" rel="stylesheet" />
+</head>
+<body class="main_body">
+    <input type="hidden" id="hid_name" value="@user.LoginName" />
+    <input type="hidden" id="hid_utype" value="@user.UserTypeId"/>
+    <div class="layui-layout layui-layout-admin">
+        <!-- 顶部 -->
+        <div class="layui-header header">
+            <div class="layui-main mag0">
+                <a href="#" class="logo">@ConstVal.WebConfig.SysName</a>
+                <!-- 显示/隐藏菜单 -->
+                <a href="javascript:;" class="seraph hideMenu" title="收起/显示左侧菜单">
+                    <i class="layui-icon layui-icon-layouts" style="color:white;"></i>   
+                </a>
+                <!-- 顶级菜单 -->
+                <ul class="layui-nav topLevelMenus" pc>
+                   @foreach (var u in um)
+                   {
+                    <li class="layui-nav-item" data-id="@u.MenuCode">
+                        <a href="javascript:;" data-id="@u.Id"><i class="layui-icon">@Html.Raw(u.Icon)</i><cite>@u.MenuName</cite></a>
+                    </li>
+                   }
+                    
+                </ul>
+                <!-- 顶部右侧菜单 -->
+                <ul class="layui-nav top_menu">
+                    @if (user.UserTypeId == 2 || user.UserTypeId == 1)
+                    {
+                    <li class="layui-nav-item" pc>
+                        <a href="javascript:;" class="clearCache"><i class="layui-icon" data-icon="&#xe640;">&#xe640;</i><cite>清除缓存</cite></a>
+                    </li>
+                    }
+                    <li class="layui-nav-item" id="userInfo">
+                        <a href="javascript:;">
+                        <img src="/Other/GetImg?id=@user.HeadImgId" class="layui-nav-img userAvatar" id="head_simg" width="35" height="35"><cite class="adminName">@user.UserName</cite></a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" data-url="/User/UserInfo"><i class="seraph icon-ziliao" data-icon="icon-ziliao"></i><cite>个人资料</cite></a></dd>
+                            <dd><a href="javascript:editPwd();" ><i class="seraph icon-xiugai" data-icon="icon-xiugai"></i><cite>修改密码</cite></a></dd>
+
+                            <dd><a href="javascript:;" data-url="/Notice/Index"><i class="layui-icon">&#xe645;</i><cite>系统公告</cite>@*<span class="layui-badge-dot"></span>*@</a></dd>
+                         
+                            <dd pc><a href="javascript:;" class="changeSkin"><i class="layui-icon">&#xe61b;</i><cite>更换皮肤</cite></a></dd>
+                            <dd><a href="javascript:;" class="signOut"><i class="seraph icon-tuichu"></i><cite>注销</cite></a></dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 左侧导航 -->
+        <div class="layui-side layui-bg-black">
+            <div class="user-photo">
+                <a class="img" title="我的头像"><img src="/Other/GetImg?id=@user.HeadImgId" id="head_bimg" class="userAvatar"></a>
+                <p>你好！<span class="userName">@user.UserName</span>, 欢迎登录</p>
+            </div>
+            <div class="navBar layui-side-scroll" id="navBar">
+                <ul class="layui-nav layui-nav-tree">
+                    <li class="layui-nav-item layui-this">
+                        <a href="javascript:;" data-url="/Home/Default"><i class="layui-icon" data-icon=""></i><cite>首页</cite></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- 右侧内容 -->
+        <div class="layui-body layui-form" style="bottom:0 !important;">
+            <div class="layui-tab mag0" lay-filter="bodyTab" id="top_tabs_box">
+                <ul class="layui-tab-title top_tab" id="top_tabs">
+                    <li class="layui-this" lay-id=""><i class="layui-icon">&#xe68e;</i> <cite>首页</cite></li>
+                </ul>
+                <ul class="layui-nav closeBox">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;"><i class="layui-icon caozuo">&#xe643;</i> 页面操作</a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" class="refresh refreshThis"><i class="layui-icon">&#x1002;</i> 刷新当前</a></dd>
+                            <dd><a href="javascript:;" class="closePageOther"><i class="seraph icon-prohibit"></i> 关闭其他</a></dd>
+                            <dd><a href="javascript:;" class="closePageAll"><i class="seraph icon-guanbi"></i> 关闭全部</a></dd>
+                        </dl>
+                    </li>
+                </ul>
+                <div class="layui-tab-content clildFrame">
+                    <div class="layui-tab-item layui-show">
+                        <iframe src="/Home/Default"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 底部 -->
+        @*<div class="layui-footer footer">
+          社区健康管理 @@2018
+        </div>*@
+    </div>
+    <!-- 修改密码 -->
+    <div id="d_editpwd" style="display:none;padding:10px;">
+        <form class="layui-form" onsubmit="return false;">
+            <div class="layui-form-item" style="width:360px;">
+                <label class="layui-form-label">旧密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="OldPwd" id="txt_old" lay-verify="pass" autocomplete="off" placeholder="请输入旧密码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="width:360px;">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="NewPwd" id="txt_new" lay-verify="pass" autocomplete="off" placeholder="请输入新密码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" style="width:360px;">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-block">
+                    <input type="password" name="SurePwd" id="txt_sure" lay-verify="pass" autocomplete="off" placeholder="请再次输入密码" class="layui-input">
+                </div>
+            </div>
+            <div style="margin-left:50px;">
+                <button class="layui-btn layui-btn-normal" onclick="sureSub();" id="btn_sub" style="width:100px;letter-spacing:5px;">保存</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- 移动导航 -->
+    <script src="~/Scripts/layui/layui.js?v=@ConstVal.WebConfig.JsVersion"></script>
+    <script src="~/Scripts/index.js?v=@ConstVal.WebConfig.JsVersion"></script>
+    <script src="~/Scripts/cache.js?v=@ConstVal.WebConfig.JsVersion"></script>
+    <script type="text/javascript">
+        var w2;
+        function editPwd() {
+            w2 = layer.open({
+                title: '修改密码',
+                type: 1,
+                content: $("#d_editpwd"),
+                area: ['500px', '300px;']
+            });
+        }
+        function sureSub() {
+            var _old = $("#txt_old").val();
+            var _new = $("#txt_new").val();
+            var _sure = $("#txt_sure").val();
+            if (valiPwd(_new)) {
+                if (_sure == _new) {
+                    $.post("/User/EditPwd", { oldPwd: _old, newPwd: _new }, function (result) {
+                         if (typeof result == "string")  result = eval('(' + result + ')');
+                        if (result.State == 0) {
+                            layer.msg("修改密码成功！", { icon: 1 });
+                            layer.close(w2);
+                        } else {
+                            layer.alert(result.Message, { icon: 5 });
+                        }
+                    })
+                } else {
+                    layer.alert("两次输入密码不一致", { icon: 5 });
+                }
+            }
+        }
+
+        function valiPwd(pwd) {
+            if (pwd.length > 12 || pwd.length < 6) {
+                layer.alert("密码必须6到12位", { icon: 5 });
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

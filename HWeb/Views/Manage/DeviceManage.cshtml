@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "设备列表";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+
+</style>
+<div style="padding:20px;">
+    <div class="layui-row">
+        <div class="layui-col-md10">
+            <div class="grid-demo grid-demo-bg1"><p><i class="layui-icon">&#xe60a;</i> 设备列表</div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="grid-demo">
+                <div style="float:right;"><button onclick="add()" class="layui-btn layui-btn-primary layui-btn-sm">添加设备</button></div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+    <table id="tab_list" lay-filter="tab_list"></table>
+</div>
+
+<script type="text/javascript">
+    var table = layui.table, form = layui.form;
+    var w1,w2,wunbind,tab1,w3;
+    $().ready(function () {
+        table.render({
+            elem: '#tab_list'
+         , url: '/Device/AjaxGetDeviceList' //数据接口
+         , page: true //开启分页
+         , cols: [[ //表头
+             {
+                 field: 'DeviceId', title: 'ID', width: 60
+             },
+             {
+                 field: 'Imei', title: '设备IMEI'
+             },
+            {
+                field: 'LoginName', title: '绑定用户'
+            },
+             { field: 'Created', title: '创建时间'},
+              {
+                  field: 'Oper', title: '操作', width: 140, templet: function (d) {
+                      var _imei = '"' + d.Imei + '"'
+
+                      var _jk = '<a class="a-self" href="Javascript:return false" data-url="/Device/Monitor?id=' + d.DeviceId + '" onclick="openMonitor(this);"><i class="layui-icon" data-icon="&#xe715;"></i><cite>监控</cite></a>';
+
+                      
+                      if (getUserType() == 1 || getUserType() == 2) {
+                          _jk += "&nbsp;&nbsp;<a href='Javascript: exec(" + _imei + ", 3); ' class='a - self' style='color: red;'>删除</a>";
+                      }
+
+                      if (d.UserId > 0) {
+                          return "<a href='Javascript:exec(" + _imei + ",1);' class='a-self' style='color:#FF5722;'>解绑</a>&nbsp;&nbsp;" + _jk;
+                      }
+                      else {
+                          return "<a href='Javascript:exec(" + _imei + ",2);' class='a-self'>绑定</a>&nbsp;&nbsp;" + _jk;
+                      }
+                  }
+              }
+         ]]
+            , page: true,
+            limit: 20,
+            limits: [10, 20, 30, 50]
+        });
+    });
+
+
+    function openMonitor(t) {
+        parent.window.addTab($(t));
+    }
+
+    function exec(imei, type) {
+        if (type == 1) {
+            w3=layer.confirm('确定解绑该设备？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                doAjax(imei, type, "");
+            }, function () {
+            });
+        }
+        else if (type == 2) {
+            w3=layer.prompt({ title: '请输入要绑定的账号', formType: 0 }, function (ln, index) {
+                doAjax(imei, type, ln);
+            });
+        }
+        else if (type == 3) {
+            w3=layer.confirm('确定删除该设备？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                doAjax(imei, type, "");
+            }, function () {
+            });
+        }
+        
+    }
+
+    function doAjax(imei, type, ln) {
+        var _w = layer.load(0, { shade: false });
+        $.post("/Device/AjaxSubUD", { imei: imei, type: type, loginName: ln }, function (result) {
+             if (typeof result == "string")  result = eval('(' + result + ')');
+            layer.close(_w);
+            layer.close(w3);
+            if (!isOk(result)) {
+                layer.alert(result.Message, { icon: 5 });
+            }
+            else {
+                var wunbind = layer.alert(result.Message, { icon: 1 }, function () {
+                    location.reload();
+                    layer.close(wunbind);
+                });
+            }
+        });
+    }
+    //添加设备
+    function add() {
+        layer.prompt({ title: '添加设备 - 输入IMEI' }, function (val, index) {
+            if (val) {
+                var _wl1 = layer.load();
+                $.post("/Device/AjaxAddDevice", { imei: val }, function (result) {
+                    layer.close(_wl1);
+                    
+                    result = proResult(result);
+                    if (!isOk(result)) {
+                        layer.alert(result.Message, { icon: 5 });
+                    } else {
+                        layer.close(index);
+                        var _wa1 = layer.alert(result.Message, { icon: 1 }, function () {
+                            layer.close(_wa1);
+                            location.reload();
+                        });
+                    }
+                });
+                
+            }
+        });
+    }
+</script>
+
+

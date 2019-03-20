@@ -1,0 +1,177 @@
+﻿@using HWeb.Entity.WebEntity
+@{
+    List<UserType> uts = ViewBag.Uts as List<UserType>;
+    List<SortMenu> Ums = ViewBag.Ums as List<SortMenu>;
+    ViewBag.Title = "PowerManage";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+    #pm_all {
+        padding:10px;
+    }
+    #pma_ul>li {
+        float:left;
+        text-decoration:none;
+        list-style:none;
+        border:1px solid black;
+        padding:10px 20px;
+        text-align:center;
+        margin-left:10px;
+    }
+    .ul_uts {
+        padding:15px 20px;
+        margin:0px;
+        width:160px;
+        text-align:center;
+        box-shadow:1px 1px 1px 1px #555;
+        margin-left:20px;
+    }
+        .ul_uts > li {
+            padding:5px 10px;
+            cursor:pointer;
+            color:#555;
+            margin-top:5px;
+        }
+            .ul_uts > li:hover {
+               background-color:#e2e2e2;
+            }
+    .li_left {
+        text-align: left;
+        color: black;
+    }
+
+    #ul_cur > .li_foucs {
+      box-shadow:1px 1px 1px 1px #FF5722;
+    }
+    #ul_all > .li_foucs {
+          box-shadow:1px 1px 1px 1px #009688;
+    }
+</style>
+
+<div id="pm_all">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend class="fz16">用户角色</legend>
+    </fieldset>
+    <div class="d_uts">
+        @foreach (UserType ut in uts)
+        {
+            <button class="layui-btn layui-btn-primary layui-btn-lg" onclick="loadUserType(this,@ut.Id)">@ut.TypeName</button>
+        }
+    </div>
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend  class="fz16"><span id="sp_cur"></span></legend>
+    </fieldset>
+   
+    <div class="layui-row" style="width:720px;margin-left:50px;">
+        <div class="layui-col-md5" style="padding:5px 10px;">
+            <div class="grid-demo grid-demo-bg1">
+                当前权限
+                <hr>
+                <ul class="ul_uts" id="ul_cur">
+                </ul>
+            </div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="grid-demo">
+                <div style="margin-top:50px;">
+                    <br/>
+                    <button class="layui-btn" onclick="editPower(1);"><i class="layui-icon">&#xe668;</i>添加权限</button>
+                    <br/>
+                    <br />
+                    <br />
+                    <button class="layui-btn layui-btn-danger" onclick="editPower(2);">移除权限<i class="layui-icon">&#xe66b;</i></button>
+                    <br />
+                    <br />
+                    <p style="font-size:12px !important;color:#009688;">*单击选择权限进行操作</p>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md5">
+            <div class="grid-demo grid-demo-bg1">
+                所有权限
+                <hr>
+                <ul class="ul_uts" id="ul_all" style="margin-left:50px;">
+                    @foreach (SortMenu m in Ums)
+                    {
+                        string cls = m.ParentId == 0 ? "li_left " : "";
+                        <li class="@cls" onclick="liClick(this,@m.Id)" data-id="@m.Id"><i class='layui-icon'>@Html.Raw(m.Icon)</i> @m.MenuName</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<input type="hidden" value="0" id="hid_usertype" />
+<script type="text/javascript">
+    $().ready(function () {
+        $(".d_uts>button:first").click();
+        //  loadUserType($(".d_uts>button:first"),1);
+    });
+
+    var curTypeBtn;
+    function liClick(t, id) {
+        if ($(t).is(".li_foucs")) {
+            $(t).removeClass("li_foucs");
+        } else {
+            $(t).addClass("li_foucs");
+
+        }
+    }
+    //加载菜单
+    function loadUserType(t, userType) {
+        curTypeBtn = t;
+        $(".ul_uts>.li_foucs").removeClass("li_foucs");
+        $(".d_uts>button").removeClass("layui-btn-normal").css("color", "black");
+        $(t).addClass("layui-btn-normal").css("color", "white");
+        $("#ul_cur").html("");
+        var _l1 = layer.load();
+        $("#hid_usertype").val(userType);
+        $("#sp_cur").text($(t).text());
+        $.post("/Menu/AjaxGetMenu", { userType: userType }, function (result) {
+            layer.close(_l1);
+             if (typeof result == "string")  result = eval('(' + result + ')');
+            $(result.menus).each(function (i, t) {
+                var _style = "";
+                if (t.ParentId== 0)
+                    _style += " class='li_left '";
+                $("#ul_cur").append("<li onclick='liClick(this,"+t.Id+")'" + _style + " data-id='" + t.Id + "'><i class='layui-icon'>" + t.Icon + "</i>&nbsp;" + t.MenuName + "</li>");
+            });
+            if(result.menus.length==0){
+                $("#ul_cur").append("<li style='color:#FF5722;'>暂未配置权限</li>");
+            }
+        });
+    }
+    //修改权限
+    function editPower(etype){
+        var _lis = $("#ul_all>.li_foucs");
+        if (etype == 2)
+            _lis = $("#ul_cur>.li_foucs");
+
+        if (_lis.length == 0) {
+            layer.alert("请先选择权限", { icon: 0 });
+            return;
+        } else {
+            var type = $("#hid_usertype").val(), pids = [], msg = $(".d_uts .layui-btn-normal").text() + "的";
+            $(_lis).each(function (index, item) {
+                pids[index] = $(item).data("id");
+                msg += $(item).text() + " ";
+            });
+
+            $.post("/Manage/AjaxEditPower", { Type: etype, PIds: pids, UserType: type, PowerStr: msg }, function (result) {
+                 if (typeof result == "string")  result = eval('(' + result + ')');
+                if (isOk(result)) {
+                    layer.alert("已将" + msg + (etype == 1 ? "加入" : "移除"), { icon: 1 });
+                    loadUserType(curTypeBtn, type);
+                } else {
+                    layer.alert("权限操作失败", { icon: 2 });
+                }
+            });
+        }
+    }
+
+</script>
+
+
+
+

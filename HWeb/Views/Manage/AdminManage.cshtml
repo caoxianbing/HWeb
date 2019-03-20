@@ -1,0 +1,163 @@
+﻿
+@{
+    ViewBag.Title = "医生列表";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+    .um_headimg {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+    }
+</style>
+<div style="padding:20px;">
+    <div class="layui-row">
+        <div class="layui-col-md10">
+            <div class="grid-demo grid-demo-bg1"><p><i class="layui-icon">&#xe60a;</i> 管理员列表</div>
+        </div>
+        <div class="layui-col-md2">
+            <div class="grid-demo">
+                <div style="float:right;"><button onclick="add()" class="layui-btn layui-btn-primary layui-btn-sm">添加管理员</button></div>
+                <div style="clear:both;"></div>
+            </div>
+        </div>
+    </div>
+    <table id="tab_list" lay-filter="tab_list"></table>
+</div>
+
+<div id="d_detail" style="display:none;padding:10px;">
+    <form class="layui-form" onsubmit="return false;" action="/User/AJaxAddAdmin">
+        <div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">登录账号</label>
+                <div class="layui-input-block" style="width:220px">
+                    <input type="text" name="LoginName" lay-verify="required" autocomplete="off" placeholder="请输入管理员账号" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">管理员姓名</label>
+                <div class="layui-input-block" style="width:220px">
+                    <input type="text" name="UserName" lay-verify="required" autocomplete="off" placeholder="请输入管理员姓名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">手机号码</label>
+                <div class="layui-input-block" style="width:220px">
+                    <input type="text" name="PhoneNum" lay-verify="phone" autocomplete="off" placeholder="请输入手机号码" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-block" style="width:220px">
+                    <input type="text" name="Pwd" lay-verify="pass" autocomplete="off" placeholder="请输入密码" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div style="margin-left:50px;">
+            <button class="layui-btn layui-btn-normal" lay-submit="" id="btn_sub" lay-filter="btn_sub" style="width:100px;letter-spacing:5px;">保存</button>
+        </div>
+    </form>
+</div>
+
+<div id="d_ulist" style="display:none;padding:10px;">
+    <table id="user_list" lay-filter="user_list"></table>
+</div>
+
+<script type="text/javascript">
+    var table = layui.table, form = layui.form;
+    var w1, w2;
+    $().ready(function () {
+        table.render({
+            elem: '#tab_list'
+       , url: '/User/AjaxGetUsers' //数据接口
+       , page: true //开启分页
+       , cols: [[ //表头
+            {
+                field: 'HeadImgId', title: '', width: 70, templet: function (d) {
+                    return '<img class="um_headimg" src="/Other/GetImg?id=' + d.HeadImgId + '" />';
+                }
+            },
+           {
+               field: 'Id', title: 'ID', width: 80
+           },
+           {
+               field: 'UserName', title: '管理员名称'
+           },
+          {
+              field: 'LoginName', title: '账号'
+          },
+           { field: 'PhoneNum', title: '手机号码', width: 200 },
+           { field: 'Email', title: '邮箱', width: 300 },
+           {
+               field: 'Sex', title: '性别', width: 60, templet: function (d) {
+                   if (d.Sex == 1) {
+                       return "<i class='layui-icon' style='color:#1E9FFF'>&#xe662;</i>";
+                   }
+                   else if (d.Sex == 0) {
+                       return "<i class='layui-icon' style='color:#f69ed1'>&#xe661;</i>";
+                   }
+                   else
+                       return "";
+               }
+           },
+          {
+              field: 'Pro', title: '操作', width: 130, templet: function (d) {
+                  var _name = "'" + d.LoginName + "'";
+                  return '<button class="layui-btn layui-btn-primary layui-btn-xs" onclick="edit(' + d.Id + ');">&nbsp;&nbsp;&nbsp;<i class="layui-icon">&#xe642;</i>&nbsp;&nbsp;</button>&nbsp;<button class="layui-btn layui-btn-primary layui-btn-xs" onclick="del(' + d.Id + ',' + _name + ')">&nbsp;&nbsp;&nbsp;<i class="layui-icon" style="color:red">&#xe640;</i>&nbsp;&nbsp;</button>';
+              }
+          }
+       ]]
+          , page: true,
+            limit: 20,
+            limits: [10, 20, 30, 50],
+            where: { type: 2 }
+        });
+    });
+
+    function edit(id) {
+        location.href = "/User/EditUserByManage?userId=" + id;;
+    }
+
+    function add() {
+        w2 = layer.open({
+            title: '新增管理员',
+            type: 1,
+            content: $("#d_detail"),
+            area: ['700px', '400px;']
+        });
+        form.render();
+        //监听提交事件
+        formSub({
+            form: form, layer: layer, btn: "btn_sub", msg: "提交中...", okFunc: function (result) {
+                layer.alert("保存成功", { icon: 1 }, function () {
+                    layer.close(w2);
+                    location.reload();
+                })
+            }
+        });
+    }
+    //DeleteUser
+    //删除
+    function del(id, name) {
+        layer.confirm('确定删除' + name + '？', {
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            var _w = layer.load(0, { shade: false });
+
+            $.post("/User/DeleteUser", { userId: id }, function (result) {
+                 if (typeof result == "string")  result = eval('(' + result + ')');
+                layer.close(_w);
+                if (!isOk(result)) {
+                    layer.alert(result.Message || "删除失败！", { icon: 5 });
+                }
+                else {
+                    layer.alert(result.Message || "删除成功！", { icon: 1 }, function () {
+                        location.reload();
+                    });
+                }
+            });
+
+        }, function () {
+        });
+    }
+</script>

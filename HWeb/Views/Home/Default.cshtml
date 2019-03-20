@@ -1,0 +1,239 @@
+﻿@using HWeb.Entity.WebEntity
+@{
+    List<WebLog> logs = ViewBag.Logs as List<WebLog>;
+    User user = ViewBag.User as User;
+    int count =(int) ViewBag.DeviceCount;
+    ViewBag.Title = "首页";
+    Layout = "~/Views/Shared/_DefaultLayout.cshtml";
+}
+<style type="text/css">
+    #d_all {
+        padding:10px;
+    }
+    .panel {
+       height:90px;
+    }
+    .panel_box {
+        margin-bottom: 5px;
+    }
+    .panel_icon {
+        width: 40%;
+        display: inline-block;
+        line-height: 80px;
+        float: left;
+        position: relative;
+        height: 100%;
+        text-align:center;
+    }
+    .seraph {
+       font-size:40px;
+    }
+    .panel_word {
+        width: 60%;
+        display: inline-block;
+        float: right;
+        margin: 13px 0 14px;
+        text-align:center;
+    }
+        .panel_word span {
+            font-size: 25px;
+            display: block;
+            height: 34px;
+        }
+    .panel .loginTime {
+        font-size: 15px;
+        color: #1E9FFF;
+        line-height: 17px;
+    }
+    .panel_box a {
+        display: block;
+        border-radius: 5px;
+        overflow: hidden;
+        height: 80px;
+        background-color: #f2f2f2 !important;
+    }
+    .ul_logs > li {
+        border-bottom:1px solid #f1f1f1;
+        padding:5px;
+    }
+    .log_time {
+    }
+</style>
+<div id="d_all">
+    <blockquote class="layui-elem-quote layui-bg-green">
+        <div id="nowTime"></div>
+    </blockquote>
+    <div class="layui-row layui-col-space10 panel_box">
+        <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+            <a href="javascript:;" data-url="https://gitee.com/layuicms/layuicms2.0" target="_blank">
+                <div class="panel_icon layui-bg-red">
+                    <i class="layui-icon" style="font-size:40px;">&#xe66f;</i>
+                </div>
+                <div class="panel_word">
+                    <span>@WebHelper.GetUTName(user.UserTypeId ?? 0)</span>
+                    <cite>用户类型</cite>
+                </div>
+            </a>
+        </div>
+        <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+            <a href="javascript:;" data-url="page/user/userList.html">
+                <div class="panel_icon layui-bg-orange">
+                    <i class="layui-icon" style="font-size:40px;">&#xe857;</i>
+                </div>
+                <div class="panel_word userAll">
+                    <span>@count</span>
+                    <cite>设备总数</cite>
+                    <cite class="layui-hide">用户中心</cite>
+                </div>
+            </a>
+        </div>
+
+        <div class="panel layui-col-xs12 layui-col-sm6 layui-col-md4 layui-col-lg2">
+            <a href="javascript:;">
+                <div class="panel_icon layui-bg-blue">
+                    <i class="layui-icon" style="font-size:40px;">&#xe637;</i>
+                </div>
+                <div class="panel_word">
+                    <span class="loginTime">
+                        @user.LastLoginTime.Value.ToString("yyyy年MM月dd日") <br />
+                    @user.LastLoginTime.Value.ToString("HH:mm:ss")
+                </span>
+                <cite>上次登录时间</cite>
+            </div>
+        </a>
+    </div>
+</div>
+
+<blockquote class="layui-elem-quote layui-bg-gray">
+    <div >
+        系统公告：<marquee scrollAmount=3 style="width:90%;max-width:600px;vertical-align:bottom;" id="mq_a">靓丽风景线</marquee>
+    </div>
+</blockquote>
+<div id="d_defaulshow" style="padding: 20px; background-color: #F2F2F2;">
+    <div class="layui-row layui-col-space15">
+
+        <div class="layui-col-md12">
+            @if (user.UserTypeId == 1 || user.UserTypeId == 2)
+            {
+                <iframe src="/Device/Monitor" style="width:100%;height:600px;border:none;"></iframe>
+            }
+            else if (user.UserTypeId == 3)
+            {
+                <iframe src="/Home/DoctorShow" style="width:100%;height:600px;border:none;"></iframe>
+                <script>
+                    $().ready(function () {
+                        $("#d_defaulshow").css("background-color", "white").css("border", "1px solid #F2F2F2");
+                    });
+                </script>
+            }
+            else
+            {
+                <iframe src="/Home/UserShow?deviceId=@user.DeviceId" style="width:100%;height:600px;border:none;"></iframe>
+                <script>
+                    $().ready(function () {
+                        $("#d_defaulshow").css("background-color", "white").css("border", "1px solid #F2F2F2");
+                    });
+                </script>
+            }
+
+        </div>
+        <div>
+            @*<div class="layui-col-md8">
+                    <div class="layui-card">
+                        <div class="layui-card-header layui-bg-green">最近日志
+                        <div style="float:right">
+                            <a href="javascript:;"  onclick="openTab(this);" title="更多" data-url="/Manage/WebLog"><i class="layui-icon">&#xe66b;</i><cite style="display:none;">网站日志</cite></a>
+                        </div>
+                            <div class="clear"></div>
+
+                        </div>
+                        <div class="layui-card-body">
+                            <ul class="ul_logs">
+                               @foreach (WebLog l in logs)
+                               {
+                                   string color = "";
+                                   switch (l.LogLevel)
+                                   {
+                                       case 2:
+                                           color = "#FFB800";
+                                           break;
+                                       case 3:
+                                           color = "#FF5722";
+                                           break;
+                                       case 4:
+                                           color = "red";
+                                           break;
+                                       default:
+                                           color = "#393D49";
+                                           break;
+                                   }
+
+                                   <li style="color:@color"><span class="log_time">@l.Created.Value.ToString("yyyy-MM-dd HH:mm") &nbsp;&nbsp;</span>@l.Content &nbsp;&nbsp; Ip:<span>@l.ClientIp</span></li>
+                               }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header layui-bg-green">系统公告
+                            <div style="float:right">
+                                <a href="javascript:;" title="更多" onclick="openTab(this);" data-url="/Notice/Index"><i class="layui-icon">&#xe66b;</i><cite style="display:none;">系统公告</cite></a>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div class="layui-card-body">
+                          <h4 style="text-align:center;" class="dn_title"></h4>
+                            <div class="dn_content">
+                            </div>
+                            <div style="float:right;color:#808080" class="dn_created">
+
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+    $().ready(function () {
+        getLangDate();
+        //获取系统公告
+        getNotice(function (res) {
+            $("#mq_a").html(res.Content);
+            $(".dn_title").text(res.Title);
+            $(".dn_content").html("&nbsp;&nbsp;&nbsp;&nbsp;" + res.Content);
+            $(".dn_created").text(res.Created);
+        });
+    })
+
+    function addTab(t) {
+        parent.window.addTab($(t));
+    }
+
+    function getLangDate() {
+        var dateObj = new Date(); //表示当前系统时间的Date对象
+        var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+        var month = dateObj.getMonth() + 1; //当前系统时间的月份值
+        var date = dateObj.getDate(); //当前系统时间的月份中的日
+        var day = dateObj.getDay(); //当前系统时间中的星期值
+        var weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+        var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串
+        var hour = dateObj.getHours(); //当前系统时间的小时值
+        var minute = dateObj.getMinutes(); //当前系统时间的分钟值
+        var second = dateObj.getSeconds(); //当前系统时间的秒钟值
+        var timeValue = "" + ((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午"); //当前时间属于上午、晚上还是下午
+        newDate = dateFilter(year) + "年" + dateFilter(month) + "月" + dateFilter(date) + "日 " + " " + dateFilter(hour) + ":" + dateFilter(minute) + ":" + dateFilter(second);
+        document.getElementById("nowTime").innerHTML = timeValue + "好！ 欢迎使用健康管理系统。当前时间为： " + newDate + "　" + week;
+        setTimeout("getLangDate()", 1000);
+    }
+
+    function dateFilter(date) {
+        if (date < 10) { return "0" + date; }
+        return date;
+    }
+</script>
