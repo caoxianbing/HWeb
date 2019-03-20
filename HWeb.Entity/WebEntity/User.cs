@@ -37,5 +37,7 @@ namespace HWeb.Entity.WebEntity
         public Nullable<int> HeartMax { get; set; }
         public Nullable<int> BloodMin { get; set; }
         public Nullable<int> BloodMax { get; set; }
+        public Nullable<int> BloodMin2 { get; set; }
+        public Nullable<int> BloodMax2 { get; set; }
     }
 }

@@ -49,8 +49,8 @@
              { field: 'PhoneNum', title: '手机号码' },
              { field: 'BloodValue', title: '血压阈值' },
 
-             { field: 'Shrink', title: '收缩压' },
-             { field: 'Diastolic', title: '舒张压' },
+             { field: 'Shrink', title: '舒张压' },
+             { field: 'Diastolic', title: '收缩压' },
              { field: 'HeartValue', title: '心率阈值' },
              { field: 'Heart', title: '心率' },
              { field: 'LastCheckTime', title: '测量时间' },
@@ -66,11 +66,17 @@
                      else
                          return "";
                  }
+             },
+             {
+                 field: 'Cmd', title: '设备指令', width: 100, templet: function (d) {
+                     return "<a class='a-self' onclick='openCmd(1," + d.Id + ")'>下发指令</a>";
+                 }
              }
          ]]
             , page: false,
             limit: 200,
             limits: [10, 20, 30, 50],
+            loading:true,
             where: { type: 4 }
         });
     });

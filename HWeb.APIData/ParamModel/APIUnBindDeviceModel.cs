@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HWeb.APIData.ParamModel
 {
-    public class APIUnBindDeviceModel
+    public class APIUnBindDeviceModel:APIBaseModel
     {
         /// <summary>
         /// 设备imei

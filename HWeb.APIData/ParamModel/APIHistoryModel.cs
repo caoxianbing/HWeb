@@ -9,7 +9,7 @@ namespace HWeb.APIData.ParamModel
     /// <summary>
     /// 历史轨迹接口 参数
     /// </summary>
-    public class APIHistoryModel
+    public class APIHistoryModel:APIBaseModel
     {
         /// <summary>
         /// 设备id

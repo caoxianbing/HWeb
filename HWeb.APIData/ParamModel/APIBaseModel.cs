@@ -11,7 +11,7 @@ namespace HWeb.APIData.ParamModel
         /// <summary>
         /// 登录后获取到的 Token
         /// </summary>
-        public string Token { get; set; }
+        public string Token { get { return UserData.Token; } }
 
 
         private string _language = "zh-cn";

@@ -12,6 +12,8 @@ namespace HWeb.APIData
     public class UserData
     {
 
+        public static string Token = "eCPD21XGbS9z5NuQ+Jsn5k3tzNbB8kKDItHzrTkRoAk=";
+
         /// <summary>
         /// 登陆，成功返回用户信息
         ///  state 0. 表示请求正常，正确返回
@@ -30,7 +32,7 @@ namespace HWeb.APIData
                 model.Pass = pwd;
                 model.LoginType = 0;
                 rm = HttpApi.GetApiResult<LoginModel>("User/Login", model);
-
+                Token = rm.AccessToken;
                 ReadResource.ExecBack(rm, "Login");
             }
             catch (Exception ex)

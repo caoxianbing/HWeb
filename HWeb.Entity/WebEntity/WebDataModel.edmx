@@ -138,6 +138,8 @@
           <Property Name="HeartMax" Type="int" />
           <Property Name="BloodMin" Type="int" />
           <Property Name="BloodMax" Type="int" />
+          <Property Name="BloodMin2" Type="int" />
+          <Property Name="BloodMax2" Type="int" />
         </EntityType>
         <EntityType Name="UserMenu">
           <Key>
@@ -365,6 +367,8 @@
           <Property Name="HeartMax" Type="Int32" />
           <Property Name="BloodMin" Type="Int32" />
           <Property Name="BloodMax" Type="Int32" />
+          <Property Name="BloodMin2" Type="Int32" />
+          <Property Name="BloodMax2" Type="Int32" />
         </EntityType>
         <EntityType Name="UserMenu">
           <Key>
@@ -587,6 +591,8 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="WebDBModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="BloodMax2" ColumnName="BloodMax2" />
+                <ScalarProperty Name="BloodMin2" ColumnName="BloodMin2" />
                 <ScalarProperty Name="BloodMax" ColumnName="BloodMax" />
                 <ScalarProperty Name="BloodMin" ColumnName="BloodMin" />
                 <ScalarProperty Name="HeartMax" ColumnName="HeartMax" />

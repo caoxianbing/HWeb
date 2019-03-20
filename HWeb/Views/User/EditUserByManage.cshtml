@@ -227,35 +227,47 @@
             </div>
         }
 
-        <div>
-            <blockquote class="layui-elem-quote" style="margin-top: 10px;">
-                <div id="test2">健康数据标准值配置</div>
-            </blockquote>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">心率阈值</label>
-                    <div class="layui-input-inline" style="width:105px !important;" >
-                        <input type="text" name="HeartMin" style="width: 100px;"  value="@user.HeartMin"  autocomplete="off" class="layui-input">
+            <div>
+                <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+                    <div id="test2">健康数据标准值配置</div>
+                </blockquote>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">心率阈值</label>
+                        <div class="layui-input-inline" style="width:105px !important;">
+                            <input type="text" name="HeartMin" style="width: 100px;" value="@user.HeartMin" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline" style="width:105px !important;">
+                            <input type="text" name="HeartMax" autocomplete="off" style="width: 100px;" value="@user.HeartMax" class="layui-input">
+                        </div>
                     </div>
-                    <div class="layui-form-mid">-</div>
-                    <div class="layui-input-inline"  style="width:105px !important;" >
-                        <input type="text" name="HeartMax" autocomplete="off" style="width: 100px;" value="@user.HeartMax"  class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">收缩压阈值</label>
+                        <div class="layui-input-inline" style="width:105px !important;">
+                            <input type="text" name="BloodMin" autocomplete="off" style="width: 100px;" value="@user.BloodMin" class="layui-input">
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline" style="width:105px !important;">
+                            <input type="text" name="BloodMax" autocomplete="off" style="width: 100px;" value="@user.BloodMax" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">舒张压阈值</label>
+                        <div class="layui-input-inline" style="width:105px !important;">
+                            <input type="text" name="BloodMin2" autocomplete="off" style="width: 100px;" value="@user.BloodMin2" class="layui-input">
+                        </div>
+                        <div class="layui-form-mid">-</div>
+                        <div class="layui-input-inline" style="width:105px !important;">
+                            <input type="text" name="BloodMax2" autocomplete="off" style="width: 100px;" value="@user.BloodMax2" class="layui-input">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">血压阈值</label>
-                    <div class="layui-input-inline"  style="width:105px !important;" >
-                        <input type="text" name="BloodMin"  autocomplete="off" style="width: 100px;" value="@user.BloodMin"  class="layui-input">
-                    </div>
-                    <div class="layui-form-mid">-</div>
-                    <div class="layui-input-inline"  style="width:105px !important;" >
-                        <input type="text" name="BloodMax" autocomplete="off" style="width: 100px;" value="@user.BloodMax" class="layui-input">
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <div id="d_btn">
             @if (cur.UserTypeId == 1 || cur.UserTypeId == 2)

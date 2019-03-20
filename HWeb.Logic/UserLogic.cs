@@ -115,6 +115,8 @@ namespace HWeb.Logic
                     entity.HeartMax = u.HeartMax;
                     entity.BloodMax = u.BloodMax;
                     entity.BloodMin = u.BloodMin;
+                    entity.BloodMax2 = u.BloodMax2;
+                    entity.BloodMin2 = u.BloodMin2;
                 }
                 else
                 {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HWeb.APIData.ParamModel
 {
-    public class APISendCmdModel
+    public class APISendCmdModel:APIBaseModel
     {
         /// <summary>
         /// 设备 id
