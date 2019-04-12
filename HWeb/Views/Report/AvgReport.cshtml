@@ -82,7 +82,7 @@
 
     </div>
 </div>
-<input type="hidden" value="你好啊" id="hid_print" />
+<input type="hidden" value="test" id="hid_print" />
 <script type="text/html" id="basetitle">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm btn_title">基础数据</button>
@@ -148,6 +148,7 @@
             layer.alert("请选择设备！", { icon: 5 });
             return;
         }
+        $("#hid_print").val($("#sel_device").find("option:selected").text() + "-健康数据");
         var l = layer.load();
         table.render({
             elem: '#tab_list'
@@ -200,7 +201,7 @@
         });
         option = {
             title: {
-                text: '心率折线图'
+                text: $("#sel_device").find("option:selected").text()+'-心率折线图'
             },
             legend: {
                 data: ['心率']
@@ -273,7 +274,7 @@
 
         option = {
             title: {
-                text: '血压折线图'
+                text: $("#sel_device").find("option:selected").text()+'-血压折线图'
             },
             legend: {
                 data: ['舒张压', '收缩压']

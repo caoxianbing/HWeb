@@ -134,12 +134,13 @@ namespace HWeb.APIData
         /// <param name="startTime"></param>
         /// <param name="endTime"></param>
         /// <returns></returns>
-        public static HistoryModel GetHistory(int deviceId,DateTime startTime,DateTime endTime)
+        public static HistoryModel GetHistory(int deviceId,DateTime startTime,DateTime endTime,string token)
         {
             HistoryModel hm = new HistoryModel();
             try
             {
                 APIHistoryModel model = new APIHistoryModel();
+                model.Token = token;
                 model.ShowLbs = 1;
                 model.PositionType = 6;
                 //获取5000条
@@ -167,14 +168,16 @@ namespace HWeb.APIData
         /// <param name="cmdCode">指令code 设备平台获取</param>
         /// <param name="deviceId">设备id</param>
         /// <param name="deviceModel">设备型号</param>
+        /// <param name="token">设备型号</param>
         /// <param name="param">参数,可空</param>
         /// <returns></returns>
-        public static SendCmdModel SendCmd(string cmdCode, int deviceId, int deviceModel, string param = "")
+        public static SendCmdModel SendCmd(string cmdCode, int deviceId, int deviceModel,string token, string param = "")
         {
             SendCmdModel bm = new SendCmdModel();
             try
             {
                 APISendCmdModel model = new APISendCmdModel();
+                model.Token = token;
                 model.CmdCode = cmdCode.ToString();
                 model.DeviceId = deviceId;
                 model.Params = param;

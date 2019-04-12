@@ -4,6 +4,8 @@ using System.Collections;
 using System.Web.Caching;
 using HWeb.Entity.WebEntity;
 using HWeb.Logic;
+using HWeb.APIData;
+using HWeb.Framework;
 
 namespace HWeb
 {
@@ -79,6 +81,35 @@ namespace HWeb
                 cmd = CmdLogic.GetCmdConfigByCode(cmdCode, model);
             SetCache(key, cmd, 3600);//一个小时过期
             return cmd;
+        }
+
+        /// <summary>
+        /// 获取设备端登录的token
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public static string GetToken(int userId)
+        {
+            var obj = CacheHelper.GetCache("token_" + userId);
+            if (obj != null) return obj.ToString();
+
+            User u = UserLogic.GetUserById(userId);
+            string token = UserData.GetToken(u.LoginName, Encryption.AESDecrypt(u.Pwd));
+
+            CacheHelper.SetCache("token_" + userId, token);
+            return token;
+        }
+
+        /// <summary>
+        /// 根据设备id获取token
+        /// </summary>
+        /// <param name="deviceId"></param>
+        /// <returns></returns>
+        public static string GetTokenByDeviceId(string imei)
+        {
+            Device d = DeviceLogic.GetDeviceByImei(imei);
+            if (d == null) return "";
+            return GetToken(d.UserId);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using HWeb.Entity.APIModel;
+﻿using HWeb.APIData;
+using HWeb.Entity.APIModel;
 using HWeb.Entity.WebEntity;
 using HWeb.Framework;
 using HWeb.Logic;
@@ -12,7 +13,7 @@ using System.Web.Mvc;
 
 namespace HWeb
 {
-    public class BaseController: Controller
+    public class BaseController : Controller
     {
         /// <summary>
         /// 登陆用户
@@ -33,8 +34,8 @@ namespace HWeb
         /// <returns></returns>
         protected new JsonResult Json(object data) {
             return new SelfJsonResult {
-                Data=data,
-                FormateStr=ConstVal.DefaultDateTimeFormat
+                Data = data,
+                FormateStr = ConstVal.DefaultDateTimeFormat
             };
         }
 
@@ -83,6 +84,7 @@ namespace HWeb
             HWebQueue.LogQueue.Enqueue(queue);
             //  LogHelper.WriteLog(msg + ">>ip:" + GetIP());
         }
+       
 
         /// <summary>
         /// 获取客户端请求ip

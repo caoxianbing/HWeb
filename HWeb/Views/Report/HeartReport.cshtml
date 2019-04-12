@@ -119,6 +119,7 @@
             layer.alert("请选择设备！", { icon: 5 });
             return;
         }
+        $("#hid_print").val($("#sel_device").find("option:selected").text() + "-心率数据");
         var l = layer.load();
         table.render({
             elem: '#tab_list'

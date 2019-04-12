@@ -128,7 +128,7 @@ namespace HWeb
                                     log.IsSucess = false;
                                     log.SendLoginName = l.Notice;
                                     log.SendDate = DateTime.Now;
-                                    SendCmdModel model = DeviceData.SendCmd(code, l.APIDeviceId ?? 0, l.Model, l.Param);
+                                    SendCmdModel model = DeviceData.SendCmd(code, l.APIDeviceId ?? 0, l.Model, CacheHelper.GetTokenByDeviceId(l.IMEI), l.Param);
                                     log.IsSucess = model.State == 0;
                                     log.Notice = "每隔" + l.ExceTime + "分钟下发主动监测。";
                                     log.Response = model.Content + ":" + model.Message;

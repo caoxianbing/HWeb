@@ -332,7 +332,8 @@ namespace HWeb.Controllers
             else if (d != null)
             {
                 log.SendDate = DateTime.Now;
-                SendCmdModel model = DeviceData.SendCmd(cmdCode, d.APIDeviceId ?? 0, d.APIDeviceModel ?? 0, param);
+                SendCmdModel model = DeviceData.SendCmd(cmdCode, d.APIDeviceId ?? 0, d.APIDeviceModel ?? 0, CacheHelper.GetToken(d.UserId), param);
+                
                 if (model.State != 0)
                 {
                     res.State = State.Falid;
@@ -448,7 +449,7 @@ namespace HWeb.Controllers
             {
                 return Json(new BaseResult { State = State.NotFind, Message = "未找到该设备" });
             }
-            HistoryModel model = DeviceData.GetHistory(d.APIDeviceId ?? 0, start, end);
+            HistoryModel model = DeviceData.GetHistory(d.APIDeviceId ?? 0, start, end, CacheHelper.GetToken(d.UserId));
             if (model.State == 0||model.State==10)
             {
                 model.Items.ForEach(p => {

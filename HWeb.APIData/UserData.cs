@@ -11,9 +11,6 @@ namespace HWeb.APIData
 {
     public class UserData
     {
-
-        public static string Token = "eCPD21XGbS9z5NuQ+Jsn5k3tzNbB8kKDItHzrTkRoAk=";
-
         /// <summary>
         /// 登陆，成功返回用户信息
         ///  state 0. 表示请求正常，正确返回
@@ -32,7 +29,6 @@ namespace HWeb.APIData
                 model.Pass = pwd;
                 model.LoginType = 0;
                 rm = HttpApi.GetApiResult<LoginModel>("User/Login", model);
-                Token = rm.AccessToken;
                 ReadResource.ExecBack(rm, "Login");
             }
             catch (Exception ex)
@@ -45,6 +41,32 @@ namespace HWeb.APIData
             }
             return rm;
         }
+        /// <summary>
+        /// 获取用户的token
+        /// </summary>
+        /// <param name="loginName"></param>
+        /// <param name="pwd"></param>
+        /// <returns></returns>
+        public static string GetToken(string loginName, string pwd)
+        {
+            LoginModel rm = new LoginModel();
+            try
+            {
+                APILoginModel model = new APILoginModel();
+                model.Name = loginName;
+                model.Pass = pwd;
+                model.LoginType = 0;
+                rm = HttpApi.GetApiResult<LoginModel>("User/Login", model);
+             //   Tokens.Add(rm.Item.UserId, rm.AccessToken);
+                return rm.AccessToken;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex);
+                return "";
+            }
+        }
+
         /// <summary>
         /// 用户注册 接口返回状态
         /// 0. 注册成功

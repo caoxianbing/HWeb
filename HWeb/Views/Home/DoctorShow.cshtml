@@ -47,12 +47,57 @@
                  field: 'UserName', title: '居民姓名'
              },
              { field: 'PhoneNum', title: '手机号码' },
-             { field: 'BloodValue', title: '血压阈值' },
-
-             { field: 'Shrink', title: '舒张压' },
-             { field: 'Diastolic', title: '收缩压' },
+             { field: 'BloodValue2', title: '舒张阈值' },
+             
+            
+             { field: 'Shrink', title: '舒张压', templet: function (d) {
+                 var _red = "<span style='color:red;'>" + d.Shrink + "</span>";
+                     if (d.BloodValue2.indexOf('-') > 0) {
+                         var _vs = d.BloodValue2.split('-');
+                       
+                         if (_vs.lenth < 2)
+                             return _red;
+                         else if (d.Shrink < _vs[0] || d.Shrink > _vs[1])
+                             return _red
+                         else
+                             return "<span>" + d.Shrink + "</span>";
+                     }
+                     else return _red;
+             }
+             },
+             { field: 'BloodValue', title: '收缩阈值' },
+             {
+                 field: 'Diastolic', title: '收缩压', templet: function (d) {
+                     var _red = "<span style='color:red;'>" + d.Diastolic + "</span>";
+                     if (d.BloodValue.indexOf('-') > 0) {
+                         var _vs = d.BloodValue.split('-');
+                       
+                         if (_vs.lenth < 2)
+                             return _red;
+                         else if (d.Diastolic < _vs[0] || d.Diastolic > _vs[1])
+                             return _red
+                         else
+                             return "<span>" + d.Diastolic + "</span>";
+                     }
+                     else return _red;
+                 }
+             },
              { field: 'HeartValue', title: '心率阈值' },
-             { field: 'Heart', title: '心率' },
+             {
+                 field: 'Heart', title: '心率', templet: function (d) {
+                     var _red = "<span style='color:red;'>" + d.Heart + "</span>";
+                     if (d.HeartValue.indexOf('-') > 0) {
+                         var _vs = d.HeartValue.split('-');
+
+                         if (_vs.lenth < 2)
+                             return _red;
+                         else if (d.Heart < _vs[0] || d.Heart > _vs[1])
+                             return _red
+                         else
+                             return "<span>" + d.Heart + "</span>";
+                     }
+                     else return _red;
+                 } },
              { field: 'LastCheckTime', title: '测量时间' },
              { field: 'Step', title: '步数' }, 
              {

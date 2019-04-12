@@ -63,9 +63,13 @@ namespace HWeb.Entity.WebEntity
         /// </summary>
         public string HeartValue { get; set; }
         /// <summary>
-        /// 血压阈值配置
+        /// 收缩压阈值配置
         /// </summary>
         public string BloodValue { get; set; }
+        /// <summary>
+        /// 舒张压阈值配置
+        /// </summary>
+        public string BloodValue2 { get; set; }
         /// <summary>
         /// 最后测量时间
         /// </summary>

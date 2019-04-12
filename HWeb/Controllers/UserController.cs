@@ -290,6 +290,8 @@ namespace HWeb.Controllers
                 }
                 p.HeartValue = p.HeartMin + "-" + p.HeartMax;
                 p.BloodValue = p.BloodMin + "-" + p.BloodMax;
+                p.BloodValue2 = p.BloodMin2 + "-" + p.BloodMax2;
+
             });
 
             LayuiPageResult<User> ls = new LayuiPageResult<User>();
